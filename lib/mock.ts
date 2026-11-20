@@ -29,12 +29,12 @@ export const heroArt = () => {
 
 const LUN_SAB = [1, 2, 3, 4, 5, 6];
 export const usuarios: Usuario[] = [
-  { id: "u-lucia", nombre: "Lucia Paredes", rol: "comprador" },
+  { id: "u-lucia", nombre: "Lucía Paredes", rol: "comprador" },
   { id: "u-bodega", nombre: "Bodega Don Pepe", rol: "comprador" },
   { id: "u-juan", nombre: "Juan Ccori", rol: "recolector" },
-  { id: "u-maria", nombre: "Maria Quispe", rol: "recolector" },
+  { id: "u-maria", nombre: "María Quispe", rol: "recolector" },
   { id: "u-carlos", nombre: "Carlos Rivera", rol: "vendedor" },
-  { id: "u-rosa", nombre: "Rosa Diaz", rol: "vendedor" },
+  { id: "u-rosa", nombre: "Rosa Díaz", rol: "vendedor" },
   { id: "u-ana", nombre: "Ana Torres", rol: "vendedor" },
   { id: "u-admin", nombre: "Admin. Municipal", rol: "admin" },
 ];
@@ -50,7 +50,7 @@ export const productos: Producto[] = [
   { id: "p-latas-miraflores", tiendaId: "s-recicla-miraflores", nombre: "Metal y latas", descripcion: "Latas de aluminio y conservas limpias.", precio: 1.5, stock: 300, img: ph("Metal y latas") },
   { id: "p-raee-miraflores", tiendaId: "s-recicla-miraflores", nombre: "Electrónicos (RAEE)", descripcion: "Celulares, cargadores, laptops y pequeños electrodomésticos.", precio: 0.5, stock: 150, img: ph("Electronicos RAEE") },
   { id: "p-pet-sjl", tiendaId: "s-punto-verde-sjl", nombre: "Plástico PET", descripcion: "Botellas PET transparentes y de color.", precio: 0.7, stock: 1200, img: ph("Plástico PET SJL") },
-  { id: "p-carton-sjl", tiendaId: "s-punto-verde-sjl", nombre: "Papel y cartón", descripcion: "Carton corrugado y papel mixto.", precio: 0.35, stock: 1500, img: ph("Papel y cartón SJL") },
+  { id: "p-carton-sjl", tiendaId: "s-punto-verde-sjl", nombre: "Papel y cartón", descripcion: "Cartón corrugado y papel mixto.", precio: 0.35, stock: 1500, img: ph("Papel y cartón SJL") },
 ];
 export const pedidos: Pedido[] = [
   { id: "o-1", compradorId: "u-lucia", productoId: "p-pet-surco", cantidad: 12, precioUnitario: 0.8, estado: "pendiente", fecha: "2026-11-18", direccion: "Jr. Monte Rosa 145, Surco" },

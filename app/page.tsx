@@ -15,7 +15,8 @@ const PASOS = [
 export default function Home() {
   const { yo, tiendas, productos, pedidos } = useStore();
   const activas = tiendas.filter((t) => !t.suspendida);
-  const materiales = new Set(productos.map((p) => p.nombre)).size;
+  const visibles = productos.filter((p) => activas.some((t) => t.id === p.tiendaId));
+  const materiales = new Set(visibles.map((p) => p.nombre)).size;
   const nombreTienda = (id: string) => tiendas.find((t) => t.id === id)?.nombre;
   const cta = yo.rol === "vendedor" ? ["/acopio", "Ir a mi panel"] : yo.rol === "recolector" ? ["/recolector", "Ver recojos"] : ["/mis-solicitudes", L.misPedidos];
   return (
@@ -64,7 +65,7 @@ export default function Home() {
           <Link href="/puntos" className="btn-ghost">Ver todo</Link>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {productos.slice(0, 4).map((p) => <ProductCard key={p.id} p={p} tienda={nombreTienda(p.tiendaId)} puedePedir={yo.rol === "comprador"} />)}
+          {visibles.slice(0, 4).map((p) => <ProductCard key={p.id} p={p} tienda={nombreTienda(p.tiendaId)} puedePedir={yo.rol === "comprador"} />)}
         </div>
       </section>
 
