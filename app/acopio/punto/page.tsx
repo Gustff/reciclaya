@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { DIAS, L } from "@/lib/config";
 import { useStore } from "@/lib/store";
+import Acceso from "@/components/Acceso";
 import type { Tienda } from "@/lib/mock";
 
 export default function MiPunto() {
@@ -11,7 +12,7 @@ export default function MiPunto() {
   const [f, setF] = useState<Tienda>(actual ?? vacia);
   const [msg, setMsg] = useState<{ ok: boolean; t: string } | null>(null);
   useEffect(() => { setF(actual ?? { ...vacia, ownerId: yo.id }); }, [yo.id, actual?.id]); // eslint-disable-line react-hooks/exhaustive-deps
-  if (yo.rol !== "vendedor") return <p className="p-10">Solo para {L.vendedor.toLowerCase()}.</p>;
+  if (yo.rol !== "vendedor") return <Acceso rol={L.vendedor.toLowerCase()} />;
   const save = () => { const e = guardarTienda(f); setMsg(e ? { ok: false, t: e } : { ok: true, t: `${L.tienda} guardado correctamente` }); };
   const campo = (k: "nombre" | "rubro" | "direccion", label: string) => (
     <div><label className="label" htmlFor={k}>{label}</label><input id={k} className="input" value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} /></div>

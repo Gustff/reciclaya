@@ -1,10 +1,12 @@
 "use client";
 import { fmt, L } from "@/lib/config";
 import { useStore } from "@/lib/store";
+import Acceso from "@/components/Acceso";
 import EstadoBadge from "@/components/EstadoBadge";
 
 export default function MisSolicitudes() {
   const { pedidos, productos, tiendas, usuarios, yo } = useStore();
+  if (yo.rol !== "comprador") return <Acceso rol={L.comprador.toLowerCase()} />;
   const mios = pedidos.filter((o) => o.compradorId === yo.id);
   return (
     <div className="mx-auto max-w-5xl px-6 py-14">

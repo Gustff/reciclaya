@@ -24,7 +24,7 @@ export default function PuntoDetalle() {
         </div>
       </div>
       <h2 className="mt-8 mb-4 text-xl font-semibold">{L.productos} que recibe ({ps.length})</h2>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{ps.map((p) => <ProductCard key={p.id} p={p} puedePedir={yo.rol === "comprador"} />)}</div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{ps.map((p) => <ProductCard key={p.id} p={p} puedePedir={yo.rol === "comprador" || yo.rol === "visitante"} />)}</div>
     </div>
   );
 }

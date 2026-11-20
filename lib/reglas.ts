@@ -96,3 +96,37 @@ export const normalizar = (s: string) => s.normalize("NFD").replace(/\p{Diacriti
 
 /** Fecha local AAAA-MM-DD (no UTC). */
 export const fechaLocal = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+// ---------- Autenticación del MVP (H01) ----------
+export const MAX_INTENTOS = 5;
+export const BLOQUEO_MS = 15 * 60 * 1000;
+
+/** Registro de cuenta: nombre, correo válido y único, contraseña de 8+ caracteres con letras y números, rol permitido. */
+export function validarRegistro(d: { nombre: string; correo: string; clave: string; rol: Rol }, usuarios: Pick<Usuario, "correo">[]): string | null {
+  if (!d.nombre.trim()) return "Ingrese su nombre";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.correo.trim())) return "Correo inválido";
+  if (usuarios.some((u) => u.correo?.toLowerCase() === d.correo.trim().toLowerCase())) return "Ya existe una cuenta con ese correo";
+  if (d.clave.length < 8 || !/[a-zA-Z]/.test(d.clave) || !/\d/.test(d.clave)) return "La contraseña debe tener al menos 8 caracteres, con letras y números";
+  if (!["comprador", "recolector", "vendedor"].includes(d.rol)) return "Rol no permitido para el registro";
+  return null;
+}
+
+/**
+ * Inicio de sesión con bloqueo: tras MAX_INTENTOS fallidos la cuenta se bloquea BLOQUEO_MS.
+ * Devuelve el error (o null si ingresa) y el nuevo estado de intentos de la cuenta.
+ */
+export function evaluarIngreso(u: Usuario | undefined, claveCorrecta: boolean, ahora: number): { error: string | null; intentos: number; bloqueadoHasta?: number } {
+  if (!u) return { error: "Correo o contraseña incorrectos", intentos: 0 };
+  if (u.bloqueadoHasta && ahora < u.bloqueadoHasta) return { error: "Cuenta bloqueada temporalmente por intentos fallidos. Intente más tarde", intentos: u.intentos ?? MAX_INTENTOS, bloqueadoHasta: u.bloqueadoHasta };
+  if (claveCorrecta) return { error: null, intentos: 0 };
+  const intentos = (u.bloqueadoHasta ? 0 : u.intentos ?? 0) + 1;
+  if (intentos >= MAX_INTENTOS) return { error: "Cuenta bloqueada por 15 minutos tras 5 intentos fallidos", intentos, bloqueadoHasta: ahora + BLOQUEO_MS };
+  return { error: `Correo o contraseña incorrectos (le quedan ${MAX_INTENTOS - intentos} intentos)`, intentos };
+}
+
+/** Hash SHA-256 (hex) de correo + contraseña; la contraseña nunca se guarda en texto plano. */
+export async function hashClave(correo: string, clave: string): Promise<string> {
+  const datos = new TextEncoder().encode(`${correo.trim().toLowerCase()}:${clave}`);
+  const h = await crypto.subtle.digest("SHA-256", datos);
+  return [...new Uint8Array(h)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}

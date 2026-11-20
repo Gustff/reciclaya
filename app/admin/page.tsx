@@ -1,11 +1,12 @@
 "use client";
 import { L } from "@/lib/config";
 import { useStore } from "@/lib/store";
+import Acceso from "@/components/Acceso";
 import { rolLabel } from "@/components/Nav";
 
 export default function Admin() {
   const { yo, usuarios, tiendas, toggleSuspension, reset } = useStore();
-  if (yo.rol !== "admin") return <p className="p-10">Solo para {L.admin.toLowerCase()}.</p>;
+  if (yo.rol !== "admin") return <Acceso rol={L.admin.toLowerCase()} />;
   const fila = (id: string, nombre: string, sub: string, susp: boolean | undefined, tipo: "usuario" | "tienda") => (
     <div key={id} className="flex items-center justify-between border-t border-neutral-200 px-4 py-3 text-sm">
       <div><p className="font-medium">{nombre}</p><p className="text-neutral-500">{sub}</p></div>

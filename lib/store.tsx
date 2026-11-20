@@ -1,12 +1,14 @@
 "use client";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import * as M from "./mock";
-import { isSupabaseOn } from "./supabase";
-import { capacidadLiberada, fechaLocal, puedeGestionarMaterial, transicionValida, validarEliminarMaterial, validarPunto, validarSolicitud, validarTomarRecojo } from "./reglas";
+import { evaluarIngreso, hashClave, validarRegistro, capacidadLiberada, fechaLocal, puedeGestionarMaterial, transicionValida, validarEliminarMaterial, validarPunto, validarSolicitud, validarTomarRecojo } from "./reglas";
 
 interface DB { usuarios: M.Usuario[]; tiendas: M.Tienda[]; productos: M.Producto[]; pedidos: M.Pedido[] }
 interface Ctx extends DB {
-  yo: M.Usuario; setYo: (id: string) => void; listo: boolean; fuente: "mock" | "supabase";
+  yo: M.Usuario; listo: boolean;
+  ingresar: (correo: string, clave: string) => Promise<string | null>;
+  registrar: (d: { nombre: string; correo: string; clave: string; rol: M.Rol }) => Promise<string | null>;
+  salir: () => void;
   guardarTienda: (t: M.Tienda) => string | null;
   guardarProducto: (p: M.Producto) => string | null; eliminarProducto: (id: string) => string | null;
   crearPedido: (productoId: string, kg: number, direccion: string) => string | null;
@@ -15,30 +17,47 @@ interface Ctx extends DB {
   toggleSuspension: (tipo: "usuario" | "tienda", id: string) => void;
   reset: () => void;
 }
-const K = "reciclaya-db-v2", KU = "reciclaya-user";
+const K = "reciclaya-db-v3", KU = "reciclaya-sesion";
 const inicial = (): DB => ({ usuarios: M.usuarios, tiendas: M.tiendas, productos: M.productos, pedidos: M.pedidos });
 const C = createContext<Ctx | null>(null);
 const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 8)}`;
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [db, setDb] = useState<DB>(inicial);
-  const [yoId, setYoId] = useState(M.usuarios[0].id);
+  const [yoId, setYoId] = useState<string | null>(null);
   const [listo, setListo] = useState(false);
   useEffect(() => {
     try {
       const s = localStorage.getItem(K); if (s) setDb(JSON.parse(s));
-      const as = new URLSearchParams(location.search).get("as"); // ?as=<id usuario> (capturas / demo)
+      // ?as=<id> solo existe en builds locales de captura (NEXT_PUBLIC_DEMO_AS=1), nunca en producción
+      const as = process.env.NEXT_PUBLIC_DEMO_AS === "1" ? new URLSearchParams(location.search).get("as") : null;
       const u = as ?? localStorage.getItem(KU); if (u) { setYoId(u); localStorage.setItem(KU, u); }
     } catch {}
     setListo(true);
   }, []);
   useEffect(() => { if (listo) localStorage.setItem(K, JSON.stringify(db)); }, [db, listo]);
-  const yo = db.usuarios.find((u) => u.id === yoId) ?? db.usuarios[0];
+  const yo = db.usuarios.find((u) => u.id === yoId) ?? M.VISITANTE;
   const set = (f: (d: DB) => DB) => setDb((d) => f(structuredClone(d)));
 
   const ctx: Ctx = {
-    ...db, yo, listo, fuente: isSupabaseOn ? "supabase" : "mock",
-    setYo: (id) => { setYoId(id); localStorage.setItem(KU, id); },
+    ...db, yo, listo,
+    ingresar: async (correo, clave) => {
+      const u = db.usuarios.find((x) => x.correo?.toLowerCase() === correo.trim().toLowerCase());
+      const ok = Boolean(u?.claveHash) && (await hashClave(correo, clave)) === u!.claveHash;
+      const r = evaluarIngreso(u, ok, Date.now());
+      if (u) set((d) => { const x = d.usuarios.find((y) => y.id === u.id)!; x.intentos = r.intentos; x.bloqueadoHasta = r.bloqueadoHasta; return d; });
+      if (r.error) return r.error;
+      setYoId(u!.id); localStorage.setItem(KU, u!.id);
+      return null;
+    },
+    registrar: async (datos) => {
+      const err = validarRegistro(datos, db.usuarios); if (err) return err;
+      const nuevo: M.Usuario = { id: uid("u"), nombre: datos.nombre.trim(), rol: datos.rol, correo: datos.correo.trim().toLowerCase(), claveHash: await hashClave(datos.correo, datos.clave) };
+      set((d) => { d.usuarios.push(nuevo); return d; });
+      setYoId(nuevo.id); localStorage.setItem(KU, nuevo.id);
+      return null;
+    },
+    salir: () => { setYoId(null); localStorage.removeItem(KU); },
     guardarTienda: (t) => {
       const err = validarPunto(t, db.tiendas); if (err) return err;
       set((d) => {

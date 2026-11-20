@@ -1,8 +1,8 @@
 // Datos de prueba (mock) del MVP ReciclaYa
-export type Rol = "comprador" | "vendedor" | "recolector" | "admin"; // comprador=vecino, vendedor=operador de acopio
+export type Rol = "visitante" | "comprador" | "vendedor" | "recolector" | "admin"; // comprador=vecino, vendedor=operador de acopio
 export type Estado = "pendiente" | "aceptado" | "rechazado" | "entregado";
 export interface Horario { dias: number[]; abre: string; cierra: string } // dias: 0=Dom ... 6=Sab
-export interface Usuario { id: string; nombre: string; rol: Rol; suspendido?: boolean }
+export interface Usuario { id: string; nombre: string; rol: Rol; suspendido?: boolean; correo?: string; claveHash?: string; intentos?: number; bloqueadoHasta?: number }
 export interface Tienda { id: string; ownerId: string; nombre: string; rubro: string; direccion: string; horario: Horario; img: string; suspendida?: boolean }
 export interface Producto { id: string; tiendaId: string; nombre: string; descripcion: string; precio: number; stock: number; img: string }
 export interface Pedido { id: string; compradorId: string; productoId: string; cantidad: number; precioUnitario: number; estado: Estado; fecha: string; direccion: string; recolectorId?: string }
@@ -32,15 +32,19 @@ export const foto = (id: string, w = 1200) => `https://images.unsplash.com/photo
 
 const LUN_SAB = [1, 2, 3, 4, 5, 6];
 export const usuarios: Usuario[] = [
-  { id: "u-lucia", nombre: "Lucía Paredes", rol: "comprador" },
-  { id: "u-bodega", nombre: "Bodega Don Pepe", rol: "comprador" },
-  { id: "u-juan", nombre: "Juan Ccori", rol: "recolector" },
-  { id: "u-maria", nombre: "María Quispe", rol: "recolector" },
-  { id: "u-carlos", nombre: "Carlos Rivera", rol: "vendedor" },
-  { id: "u-rosa", nombre: "Rosa Díaz", rol: "vendedor" },
-  { id: "u-ana", nombre: "Ana Torres", rol: "vendedor" },
-  { id: "u-admin", nombre: "Admin. Municipal", rol: "admin" },
+  { id: "u-lucia", nombre: "Lucía Paredes", rol: "comprador" , correo: "lucia@reciclaya.pe", claveHash: "2a073c964c07f6a1aeca10d74d53b7d9227ad86619451bf4a4b7ca93d5fe41ef"},
+  { id: "u-bodega", nombre: "Bodega Don Pepe", rol: "comprador" , correo: "bodega@reciclaya.pe", claveHash: "dde9b48b259af66eb75e5b8011df29fe9a8421464b3e2b975d40146662a33e6e"},
+  { id: "u-juan", nombre: "Juan Ccori", rol: "recolector" , correo: "juan@reciclaya.pe", claveHash: "70b20714518f7d6b9b9634d77b0e562e16c3da263b2c4712225316a70d2e5d82"},
+  { id: "u-maria", nombre: "María Quispe", rol: "recolector" , correo: "maria@reciclaya.pe", claveHash: "8629898cc672a85485fadffdf2d449022b1afaa52c6896d019cfc068e01ae7fa"},
+  { id: "u-carlos", nombre: "Carlos Rivera", rol: "vendedor" , correo: "carlos@reciclaya.pe", claveHash: "bdbc1e0417737dcc680e412d30406cd30d443815a8ab452efe46dcab9ff1673e"},
+  { id: "u-rosa", nombre: "Rosa Díaz", rol: "vendedor" , correo: "rosa@reciclaya.pe", claveHash: "7ecd0dab8fc7e15cd5295d6b21af366b938031dd9afef0eef81b091a49ac056e"},
+  { id: "u-ana", nombre: "Ana Torres", rol: "vendedor" , correo: "ana@reciclaya.pe", claveHash: "da1c10ee678b9e054f2d98fd05ea4a0d2d6702c1a425396e42fb7f4703ff36f8"},
+  { id: "u-admin", nombre: "Admin. Municipal", rol: "admin" , correo: "admin@reciclaya.pe", claveHash: "357189448ad48ec2a86f4253f92e428e8ac160116e80bce7f91913eed97830dd"},
 ];
+/** Contraseña de las cuentas de demostración (datos de prueba, documentados en el README). */
+export const CLAVE_DEMO = "Recicla2026";
+export const VISITANTE: Usuario = { id: "visitante", nombre: "Visitante", rol: "visitante" };
+
 export const tiendas: Tienda[] = [
   { id: "s-ecoacopio-surco", ownerId: "u-carlos", nombre: "EcoAcopio Surco", rubro: "Santiago de Surco", direccion: "Av. Caminos del Inca 1250", horario: { dias: LUN_SAB, abre: "08:00", cierra: "18:00" }, img: foto("1722482445685-91a6b17d5d02") },
   { id: "s-recicla-miraflores", ownerId: "u-rosa", nombre: "Recicla Miraflores", rubro: "Miraflores", direccion: "Calle Schell 420", horario: { dias: [1, 2, 3, 4, 5], abre: "09:00", cierra: "17:00" }, img: foto("1611284446314-60a58ac0deb9") },

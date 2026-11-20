@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   capacidadLiberada, estaAbierto, fechaLocal, kgReciclados, normalizar, pagoEstimado, puedeGestionarMaterial,
   transicionValida, validarEliminarMaterial, validarHorario, validarMaterial, validarPunto, validarSolicitud, validarTomarRecojo,
+  evaluarIngreso, hashClave, validarRegistro, MAX_INTENTOS, BLOQUEO_MS,
 } from "@/lib/reglas";
-import { pedidos, productos, tiendas } from "@/lib/mock";
+import { CLAVE_DEMO, pedidos, productos, tiendas, usuarios } from "@/lib/mock";
 import type { Pedido, Tienda } from "@/lib/mock";
 
 const conCap = productos.find((p) => p.stock > 0)!;
@@ -93,4 +94,27 @@ describe("capacidad e indicadores (H13, H15)", () => {
 describe("utilidades", () => {
   it("la búsqueda ignora tildes", () => expect(normalizar("Av. Próceres")).toContain("proceres"));
   it("la fecha se guarda en hora local", () => expect(fechaLocal(new Date(2026, 10, 19, 22, 0))).toBe("2026-11-19"));
+});
+
+describe("autenticación (H01: registrarse e iniciar sesión)", () => {
+  const lucia = usuarios.find((u) => u.id === "u-lucia")!;
+  const nuevo = { nombre: "Pepe", correo: "pepe@correo.pe", clave: "Clave2026", rol: "comprador" as const };
+  it("la contraseña de demostración coincide con el hash guardado", async () => expect(await hashClave(lucia.correo!, CLAVE_DEMO)).toBe(lucia.claveHash));
+  it("el hash no contiene la contraseña en texto plano", async () => expect(await hashClave("a@b.pe", "Secreta123")).not.toContain("Secreta123"));
+  it("acepta un registro válido", () => expect(validarRegistro(nuevo, usuarios)).toBeNull());
+  it("rechaza un correo ya registrado", () => expect(validarRegistro({ ...nuevo, correo: lucia.correo! }, usuarios)).toMatch(/Ya existe/));
+  it("rechaza contraseñas débiles", () => {
+    expect(validarRegistro({ ...nuevo, clave: "corta1" }, usuarios)).toMatch(/8 caracteres/);
+    expect(validarRegistro({ ...nuevo, clave: "solamenteletras" }, usuarios)).toMatch(/8 caracteres/);
+  });
+  it("no permite registrarse como administrador", () => expect(validarRegistro({ ...nuevo, rol: "admin" }, usuarios)).toMatch(/Rol no permitido/));
+  it("ingresa con la contraseña correcta y reinicia los intentos", () => expect(evaluarIngreso({ ...lucia, intentos: 3 }, true, 0)).toEqual({ error: null, intentos: 0 }));
+  it("cuenta los intentos fallidos", () => expect(evaluarIngreso(lucia, false, 0).error).toMatch(/quedan 4 intentos/));
+  it("bloquea la cuenta al quinto intento fallido", () => {
+    const r = evaluarIngreso({ ...lucia, intentos: MAX_INTENTOS - 1 }, false, 1000);
+    expect(r.error).toMatch(/bloqueada/); expect(r.bloqueadoHasta).toBe(1000 + BLOQUEO_MS);
+  });
+  it("una cuenta bloqueada no ingresa ni con la contraseña correcta", () => expect(evaluarIngreso({ ...lucia, intentos: 5, bloqueadoHasta: 5000 }, true, 4000).error).toMatch(/bloqueada/));
+  it("al vencer el bloqueo puede ingresar", () => expect(evaluarIngreso({ ...lucia, intentos: 5, bloqueadoHasta: 5000 }, true, 6000).error).toBeNull());
+  it("un correo inexistente da un mensaje genérico", () => expect(evaluarIngreso(undefined, false, 0).error).toBe("Correo o contraseña incorrectos"));
 });

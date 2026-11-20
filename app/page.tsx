@@ -19,13 +19,13 @@ export default function Home() {
   const visibles = productos.filter((p) => activas.some((t) => t.id === p.tiendaId));
   const materiales = new Set(visibles.map((p) => p.nombre)).size;
   const nombreTienda = (id: string) => tiendas.find((t) => t.id === id)?.nombre;
-  const cta = yo.rol === "vendedor" ? ["/acopio", "Ir a mi panel"] : yo.rol === "recolector" ? ["/recolector", "Ver recojos"] : ["/mis-solicitudes", L.misPedidos];
+  const cta = yo.rol === "vendedor" ? ["/acopio", "Ir a mi panel"] : yo.rol === "recolector" ? ["/recolector", "Ver recojos"] : yo.rol === "comprador" ? ["/mis-solicitudes", L.misPedidos] : yo.rol === "admin" ? ["/admin", "Moderación"] : ["/ingresar", "Ingresar o crear cuenta"];
   return (
     <>
       <section className="bg-black text-white">
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-6 py-20 md:grid-cols-2 md:py-28">
           <div className="anim-fade-up">
-            <p className="eyebrow flex items-center gap-2 text-brand"><span className="pulse-dot inline-block h-2 w-2 rounded-full bg-brand" />Hola, {yo.nombre}</p>
+            <p className="eyebrow flex items-center gap-2 text-brand"><span className="pulse-dot inline-block h-2 w-2 rounded-full bg-brand" />{yo.rol === "visitante" ? "Bienvenido" : `Hola, ${yo.nombre}`}</p>
             <h1 className="mt-4 text-5xl font-black leading-[1.02] md:text-7xl">{APP.titulo}<br /><span className="text-shimmer bg-gradient-to-r from-emerald-300 via-brand to-emerald-300 bg-clip-text text-transparent">{APP.tituloAcento}</span></h1>
             <p className="mt-6 max-w-lg text-lg text-neutral-300">{APP.subtitulo}</p>
             <div className="mt-9 flex flex-wrap gap-3">
@@ -70,7 +70,7 @@ export default function Home() {
           <Link href="/puntos" className="btn-ghost">Ver todo</Link>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {visibles.slice(0, 4).map((p, i) => <Reveal key={p.id} delay={i * 100}><ProductCard p={p} tienda={nombreTienda(p.tiendaId)} puedePedir={yo.rol === "comprador"} /></Reveal>)}
+          {visibles.slice(0, 4).map((p, i) => <Reveal key={p.id} delay={i * 100}><ProductCard p={p} tienda={nombreTienda(p.tiendaId)} puedePedir={yo.rol === "comprador" || yo.rol === "visitante"} /></Reveal>)}
         </div>
       </section>
 
@@ -80,7 +80,7 @@ export default function Home() {
             <p className="eyebrow text-brand-dark">Para recolectores</p>
             <h2 className="mt-3 text-4xl font-black">Sabe dónde hay material antes de salir</h2>
             <p className="mt-4 text-neutral-700">Mira las solicitudes cercanas, toma las que te convienen y entrégalas en el punto de acopio. Menos recorridos a ciegas, más ingresos.</p>
-            <Link href="/recolector?as=u-juan" className="btn-primary mt-8">Probar como recolector</Link>
+            <Link href="/ingresar" className="btn-primary mt-8">Ingresar como recolector</Link>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={foto("1574974671999-24b7dfbb0d53")} alt="Recolectores cargando material reciclable" loading="lazy" className="aspect-[4/3] w-full rounded-3xl object-cover shadow-2xl" />

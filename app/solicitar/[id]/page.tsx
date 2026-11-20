@@ -4,17 +4,19 @@ import { useState } from "react";
 import { fmt, L } from "@/lib/config";
 import { useStore } from "@/lib/store";
 import Horario from "@/components/Horario";
+import Acceso from "@/components/Acceso";
 
 export default function Solicitar() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { productos, tiendas, crearPedido } = useStore();
+  const { productos, tiendas, crearPedido, yo } = useStore();
   const [kg, setKg] = useState(1);
   const [dir, setDir] = useState("");
   const [err, setErr] = useState("");
   const p = productos.find((x) => x.id === id);
   if (!p) return <p className="p-10">{L.producto} no encontrado.</p>;
   const t = tiendas.find((x) => x.id === p.tiendaId);
+  if (yo.rol === "visitante") return <Acceso rol={L.comprador.toLowerCase()} />;
   const enviar = () => { const e = crearPedido(p.id, kg, dir); if (e) setErr(e); else router.push("/mis-solicitudes"); };
   return (
     <div className="mx-auto grid max-w-4xl gap-8 px-4 py-10 md:grid-cols-2">
