@@ -1,13 +1,16 @@
-# CI: en cada push y Pull Request -> instalar, pruebas unitarias y build.
-# El deploy (CD) lo hace Vercel automaticamente al hacer merge a main.
-name: CI
+# Pipeline CI/CD DevSecOps de ReciclaYa
+# Etapas: 1) Build  2) Test  3) Seguridad (SAST CodeQL, dependencias, secretos)  4) Deploy (Vercel) + smoke test
+name: CI-CD DevSecOps
 on:
   push:
-    branches: [main, develop, "feature/**"]
+    branches: [main, test]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
+permissions:
+  contents: read
 jobs:
-  test-build:
+  build-test:
+    name: 1-2 Build y pruebas unitarias
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +18,84 @@ jobs:
         with: { version: 10 }
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
+      - name: Instalar dependencias (lockfile congelado)
+        run: pnpm install --frozen-lockfile
+      - name: Pruebas unitarias (Vitest)
+        run: pnpm vitest run --reporter=verbose --reporter=junit --outputFile.junit=test-results.xml
+      - name: Resumen de pruebas
+        if: always()
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import xml.etree.ElementTree as ET
+          r = ET.parse("test-results.xml").getroot()
+          t, f = int(r.get("tests", 0)), int(r.get("failures", 0)) + int(r.get("errors", 0))
+          print(f"## Pruebas unitarias\n\n| Total | Aprobadas | Fallidas |\n|---|---|---|\n| {t} | {t-f} | {f} |\n")
+          for c in r.iter("testcase"):
+              ok = "✅" if c.find("failure") is None else "❌"
+              print(f"- {ok} {c.get('classname')} › {c.get('name')}")
+          PY
+      - name: Build de produccion (Next.js)
+        run: pnpm build
+
+  sast:
+    name: 3a Seguridad - SAST (CodeQL)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v3
+
+  dependencias:
+    name: 3b Seguridad - Analisis de dependencias
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test
-      - run: pnpm build
+      - name: Auditoria de vulnerabilidades (falla con severidad alta o critica)
+        run: pnpm audit --audit-level=high
+      - name: Revision de dependencias nuevas del PR
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  secretos:
+    name: 3c Seguridad - Escaneo de secretos (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-verificacion:
+    name: 4 Deploy en Vercel y smoke test
+    needs: [build-test, sast, dependencias, secretos]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Esperar el deploy de produccion de Vercel (integracion Git)
+        run: sleep 60
+      - name: Smoke test de la URL publica
+        env:
+          URL: ${{ vars.PROD_URL }}
+        run: |
+          for ruta in / /puntos /recolector /acopio; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$URL$ruta")
+            echo "$ruta -> $code"; test "$code" = "200"
+          done
+          curl -sI "$URL" | grep -i -E "x-frame-options|x-content-type-options|strict-transport-security|referrer-policy"
