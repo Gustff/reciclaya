@@ -1,13 +1,19 @@
 @import "tailwindcss";
 @theme {
-  --color-brand: #ea580c;
-  --color-brand-dark: #c2410c;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, sans-serif;
+  --color-brand: #00a862;
+  --color-brand-dark: #008a50;
+  --color-ink: #000000;
+  --color-soft: #f4f4f4;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
-body { @apply bg-neutral-50 text-neutral-900 antialiased; }
-@utility btn { @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition cursor-pointer; }
-@utility btn-primary { @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition cursor-pointer bg-brand text-white hover:bg-brand-dark; }
-@utility btn-ghost { @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition cursor-pointer border border-neutral-300 bg-white hover:bg-neutral-100; }
-@utility card { @apply rounded-xl border border-neutral-200 bg-white; }
-@utility input { @apply w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand; }
-@utility label { @apply mb-1 block text-sm font-medium text-neutral-700; }
+body { @apply bg-white text-neutral-900 antialiased; letter-spacing: -0.01em; }
+h1, h2, h3 { letter-spacing: -0.03em; }
+@utility btn { @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-bold transition cursor-pointer; }
+@utility btn-primary { @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-bold transition cursor-pointer bg-black text-white hover:bg-neutral-700; }
+@utility btn-ghost { @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-bold transition cursor-pointer border-2 border-black bg-transparent text-black hover:bg-black hover:text-white; }
+@utility btn-light { @apply inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-bold transition cursor-pointer bg-white text-black hover:bg-neutral-200; }
+@utility btn-outline-light { @apply inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-bold transition cursor-pointer border-2 border-white text-white hover:bg-white hover:text-black; }
+@utility card { @apply rounded-3xl bg-soft; }
+@utility input { @apply w-full rounded-xl border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-black; }
+@utility label { @apply mb-1.5 block text-xs font-bold uppercase tracking-wide text-neutral-500; }
+@utility eyebrow { @apply text-xs font-bold uppercase tracking-[0.2em]; }

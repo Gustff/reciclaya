@@ -4,20 +4,18 @@ import type { Producto } from "@/lib/mock";
 
 export default function ProductCard({ p, tienda, puedePedir }: { p: Producto; tienda?: string; puedePedir?: boolean }) {
   return (
-    <div className="card overflow-hidden">
-      <div className="relative aspect-[4/3] bg-neutral-200">
+    <div className="group flex flex-col overflow-hidden rounded-3xl bg-soft transition hover:shadow-xl">
+      <div className="relative aspect-[4/3] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={p.img} alt={p.nombre} className="h-full w-full object-cover" />
-        {p.stock === 0 && <span className="absolute left-2 top-2 rounded-full bg-neutral-900/80 px-2 py-0.5 text-xs text-white">Agotado</span>}
+        <img src={p.img} alt={p.nombre} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+        {p.stock === 0 && <span className="absolute left-4 top-4 rounded-full bg-black px-3 py-1 text-xs font-bold text-white">{L.sinCapacidad}</span>}
       </div>
-      <div className="space-y-1 p-4">
-        {tienda && <p className="text-xs text-neutral-500">{tienda}</p>}
-        <h3 className="font-semibold leading-snug">{p.nombre}</h3>
-        <div className="flex items-center justify-between pt-1">
-          <span className="font-bold text-brand">{fmt(p.precio)}</span>
-          <span className="text-xs text-neutral-500">Stock: {p.stock}</span>
-        </div>
-        {puedePedir && p.stock > 0 && <Link href={`/pedir/${p.id}`} className="btn-primary mt-2 w-full">{L.pedir}</Link>}
+      <div className="flex flex-1 flex-col gap-1 p-6">
+        {tienda && <p className="eyebrow text-neutral-500">{tienda}</p>}
+        <h3 className="text-lg font-bold leading-snug">{p.nombre}</h3>
+        <p className="text-2xl font-black">{fmt(p.precio)}<span className="text-sm font-semibold text-neutral-500"> / {L.unidad}</span></p>
+        <p className="text-xs text-neutral-500">{p.stock} {L.unidad} de capacidad disponible</p>
+        {puedePedir && p.stock > 0 && <Link href={`/solicitar/${p.id}`} className="btn-primary mt-4 self-start">{L.pedir}</Link>}
       </div>
     </div>
   );

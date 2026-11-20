@@ -2,19 +2,20 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import * as M from "./mock";
 import { isSupabaseOn } from "./supabase";
-import { deltaStock, validarPedido, validarTienda } from "./reglas";
+import { deltaStock, validarPedido, validarTienda, validarTomarRecojo } from "./reglas";
 
 interface DB { usuarios: M.Usuario[]; tiendas: M.Tienda[]; productos: M.Producto[]; pedidos: M.Pedido[] }
 interface Ctx extends DB {
   yo: M.Usuario; setYo: (id: string) => void; listo: boolean; fuente: "mock" | "supabase";
   guardarTienda: (t: M.Tienda) => string | null;
   guardarProducto: (p: M.Producto) => void; eliminarProducto: (id: string) => void;
-  crearPedido: (productoId: string, cantidad: number) => string | null;
+  crearPedido: (productoId: string, kg: number, direccion: string) => string | null;
   cambiarEstado: (pedidoId: string, e: M.Estado) => void;
+  tomarRecojo: (pedidoId: string) => string | null;
   toggleSuspension: (tipo: "usuario" | "tienda", id: string) => void;
   reset: () => void;
 }
-const K = "mvp-db-v2", KU = "mvp-user";
+const K = "reciclaya-db-v1", KU = "reciclaya-user";
 const inicial = (): DB => ({ usuarios: M.usuarios, tiendas: M.tiendas, productos: M.productos, pedidos: M.pedidos });
 const C = createContext<Ctx | null>(null);
 const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 8)}`;
@@ -26,7 +27,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const s = localStorage.getItem(K); if (s) setDb(JSON.parse(s));
-      const as = new URLSearchParams(location.search).get("as"); // ?as=<id usuario> para capturas
+      const as = new URLSearchParams(location.search).get("as"); // ?as=<id usuario> (capturas / demo)
       const u = as ?? localStorage.getItem(KU); if (u) { setYoId(u); localStorage.setItem(KU, u); }
     } catch {}
     setListo(true);
@@ -43,7 +44,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       set((d) => {
         const i = d.tiendas.findIndex((x) => x.id === t.id);
         const tt = { ...t, img: t.img || M.ph(t.nombre) };
-        if (i >= 0) d.tiendas[i] = tt; else d.tiendas.push({ ...tt, id: t.id || uid("s") });
+        if (i >= 0) d.tiendas[i] = tt; else d.tiendas.push({ ...tt, id: uid("s") });
         return d;
       });
       return null;
@@ -55,12 +56,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       return d;
     }),
     eliminarProducto: (id) => set((d) => ({ ...d, productos: d.productos.filter((p) => p.id !== id) })),
-    crearPedido: (productoId, cantidad) => {
+    crearPedido: (productoId, kg, direccion) => {
       const p = db.productos.find((x) => x.id === productoId);
-      const err = validarPedido(p, cantidad, yo.rol); if (err || !p) return err;
+      const err = validarPedido(p, kg, yo.rol, direccion); if (err || !p) return err;
       set((d) => {
-        d.pedidos.unshift({ id: uid("o"), compradorId: yo.id, productoId, cantidad, precioUnitario: p.precio, estado: "pendiente", fecha: new Date().toISOString().slice(0, 10) });
-        d.productos.find((x) => x.id === productoId)!.stock -= cantidad;
+        d.pedidos.unshift({ id: uid("o"), compradorId: yo.id, productoId, cantidad: kg, precioUnitario: p.precio, estado: "pendiente", fecha: new Date().toISOString().slice(0, 10), direccion: direccion.trim() });
+        d.productos.find((x) => x.id === productoId)!.stock -= kg;
         return d;
       });
       return null;
@@ -71,6 +72,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (prod) prod.stock = Math.max(0, prod.stock + deltaStock(o.estado, e, o.cantidad));
       o.estado = e; return d;
     }),
+    tomarRecojo: (pedidoId) => {
+      const o = db.pedidos.find((x) => x.id === pedidoId);
+      if (!o) return "Solicitud no encontrada";
+      const err = validarTomarRecojo(o, yo.rol); if (err) return err;
+      set((d) => { const x = d.pedidos.find((p) => p.id === pedidoId)!; x.estado = "aceptado"; x.recolectorId = yo.id; return d; });
+      return null;
+    },
     toggleSuspension: (tipo, id) => set((d) => {
       if (tipo === "usuario") { const u = d.usuarios.find((x) => x.id === id)!; u.suspendido = !u.suspendido; }
       else { const t = d.tiendas.find((x) => x.id === id)!; t.suspendida = !t.suspendida; }
