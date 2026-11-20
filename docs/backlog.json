@@ -1,0 +1,484 @@
+{
+ "proyecto": "ReciclaYa",
+ "epicas": [
+  {
+   "clave": "E1",
+   "nombre": "Gestión de usuarios y roles",
+   "descripcion": "Registro, inicio de sesión y perfiles diferenciados para vecino, recolector, operador de acopio y administrador.",
+   "objetivo": "Identificar a cada actor del ecosistema de reciclaje y empezar a formalizar a los recolectores informales."
+  },
+  {
+   "clave": "E2",
+   "nombre": "Red de puntos de acopio",
+   "descripcion": "Registro y búsqueda de puntos de acopio con ubicación, horarios y materiales aceptados.",
+   "objetivo": "Que el vecino sepa donde, cuando y que material puede entregar, reduciendo el reciclable que termina en la basura comun."
+  },
+  {
+   "clave": "E3",
+   "nombre": "Solicitudes de recojo",
+   "descripcion": "Publicacion de material reciclable disponible (tipo, kg y dirección) y seguimiento de su estado.",
+   "objetivo": "Hacer visible la oferta de reciclables de hogares y negocios para que llegue a la cadena de reciclaje."
+  },
+  {
+   "clave": "E4",
+   "nombre": "Gestión de recolecciones",
+   "descripcion": "Herramientas para que el recolector tome solicitudes y las entregue, y para que el punto de acopio las reciba.",
+   "objetivo": "Reducir recorridos a ciegas de los recolectores y aumentar los kg recuperados e ingresos."
+  },
+  {
+   "clave": "E5",
+   "nombre": "Administración e indicadores",
+   "descripcion": "Moderacion de usuarios y puntos, e indicadores de impacto (kg reciclados, solicitudes).",
+   "objetivo": "Garantizar la calidad de la red y medir el impacto ambiental para la municipalidad y aliados."
+  }
+ ],
+ "sprints": [
+  {
+   "nombre": "Sprint 1",
+   "inicio": "2026-11-23",
+   "fin": "2026-11-27",
+   "objetivo": "Usuarios con roles pueden registrarse y los operadores publican su punto de acopio con horario."
+  },
+  {
+   "nombre": "Sprint 2",
+   "inicio": "2026-11-30",
+   "fin": "2026-12-04",
+   "objetivo": "El vecino encuentra puntos por material, distrito y horario, y ve los materiales que recibe cada uno."
+  },
+  {
+   "nombre": "Sprint 3",
+   "inicio": "2026-12-07",
+   "fin": "2026-12-11",
+   "objetivo": "El vecino solicita recojos y el recolector puede tomarlos y entregarlos."
+  },
+  {
+   "nombre": "Sprint 4",
+   "inicio": "2026-12-14",
+   "fin": "2026-12-18",
+   "objetivo": "El punto de acopio atiende solicitudes y el administrador modera y mide el impacto; release 1.0."
+  }
+ ],
+ "historias": [
+  {
+   "id": "H01",
+   "epica": "E1",
+   "rol": "vecino",
+   "quiero": "registrarme e iniciar sesión con mi correo",
+   "para": "acceder a la plataforma de forma segura",
+   "sp": 3,
+   "moscow": "Must",
+   "sprint": "Sprint 1",
+   "criterios": {
+    "dado": "un visitante no autenticado",
+    "cuando": "se registra con correo y contraseña validos",
+    "entonces": "se crea su cuenta e ingresa a su inicio",
+    "y": "si los datos son inválidos ve un mensaje de error"
+   }
+  },
+  {
+   "id": "H02",
+   "epica": "E1",
+   "rol": "administrador",
+   "quiero": "que cada usuario tenga un rol (vecino, recolector, operador o admin)",
+   "para": "mostrar a cada uno solo las funciones que le corresponden",
+   "sp": 5,
+   "moscow": "Must",
+   "sprint": "Sprint 1",
+   "criterios": {
+    "dado": "un usuario autenticado con rol recolector",
+    "cuando": "ingresa a la plataforma",
+    "entonces": "ve el menú de recojos",
+    "y": "no puede acceder al panel del operador de acopio"
+   }
+  },
+  {
+   "id": "H03",
+   "epica": "E2",
+   "rol": "operador de acopio",
+   "quiero": "registrar mi punto de acopio con dirección, distrito y horario de atención",
+   "para": "que los vecinos sepan donde y cuando llevar sus reciclables",
+   "sp": 5,
+   "moscow": "Must",
+   "sprint": "Sprint 1",
+   "criterios": {
+    "dado": "un operador autenticado sin punto registrado",
+    "cuando": "completa nombre, distrito, dirección, días y horario validos",
+    "entonces": "su punto queda publicado",
+    "y": "no puede registrar un segundo punto ni un horario con apertura mayor al cierre"
+   }
+  },
+  {
+   "id": "H04",
+   "epica": "E2",
+   "rol": "operador de acopio",
+   "quiero": "registrar los materiales que recibo con su pago por kg y capacidad",
+   "para": "que solo me envien material que puedo recibir",
+   "sp": 3,
+   "moscow": "Must",
+   "sprint": "Sprint 1",
+   "criterios": {
+    "dado": "un operador con punto registrado",
+    "cuando": "agrega un material con pago mayor a 0 y capacidad valida",
+    "entonces": "el material aparece en su punto",
+    "y": "si el pago es 0 o la capacidad negativa ve un error"
+   }
+  },
+  {
+   "id": "H05",
+   "epica": "E2",
+   "rol": "vecino",
+   "quiero": "buscar puntos de acopio por material y distrito",
+   "para": "encontrar el punto más conveniente para mis reciclables",
+   "sp": 5,
+   "moscow": "Must",
+   "sprint": "Sprint 2",
+   "criterios": {
+    "dado": "un vecino en la búsqueda",
+    "cuando": "filtra por material Plástico PET y distrito Surco",
+    "entonces": "ve solo los puntos de Surco que reciben PET con capacidad disponible"
+   }
+  },
+  {
+   "id": "H06",
+   "epica": "E2",
+   "rol": "vecino",
+   "quiero": "ver si un punto de acopio está abierto ahora y sus horarios",
+   "para": "no ir cuando esta cerrado",
+   "sp": 3,
+   "moscow": "Must",
+   "sprint": "Sprint 2",
+   "criterios": {
+    "dado": "un punto que atiende de lunes a sabado de 08:00 a 18:00",
+    "cuando": "el vecino lo consulta un domingo",
+    "entonces": "el punto aparece como Cerrado",
+    "y": "puede filtrar solo los puntos abiertos ahora"
+   }
+  },
+  {
+   "id": "H07",
+   "epica": "E2",
+   "rol": "vecino",
+   "quiero": "ver el detalle de un punto con los materiales que recibe y su pago por kg",
+   "para": "saber que puedo entregar y cuanto puedo ganar",
+   "sp": 2,
+   "moscow": "Should",
+   "sprint": "Sprint 2",
+   "criterios": {
+    "dado": "un vecino en la lista de puntos",
+    "cuando": "abre el detalle de un punto",
+    "entonces": "ve dirección, horario, materiales, pago por kg y capacidad disponible"
+   }
+  },
+  {
+   "id": "H08",
+   "epica": "E2",
+   "rol": "operador de acopio",
+   "quiero": "editar los datos y el horario de mi punto",
+   "para": "mantener la información actualizada",
+   "sp": 2,
+   "moscow": "Should",
+   "sprint": "Sprint 2",
+   "criterios": {
+    "dado": "un operador con punto registrado",
+    "cuando": "modifica el horario y guarda",
+    "entonces": "los vecinos ven el horario actualizado"
+   }
+  },
+  {
+   "id": "H09",
+   "epica": "E3",
+   "rol": "vecino",
+   "quiero": "solicitar el recojo de mis reciclables indicando material, kg y dirección",
+   "para": "que un recolector los lleve al punto de acopio",
+   "sp": 8,
+   "moscow": "Must",
+   "sprint": "Sprint 3",
+   "criterios": {
+    "dado": "un vecino y un material con capacidad disponible",
+    "cuando": "confirma la solicitud con kg validos y dirección",
+    "entonces": "la solicitud se crea en estado Pendiente y se reserva la capacidad",
+    "y": "si los kg superan la capacidad ve un error"
+   }
+  },
+  {
+   "id": "H10",
+   "epica": "E3",
+   "rol": "vecino",
+   "quiero": "ver el estado de mis solicitudes y que recolector las atiende",
+   "para": "saber cuando pasaran por mi material",
+   "sp": 3,
+   "moscow": "Must",
+   "sprint": "Sprint 3",
+   "criterios": {
+    "dado": "un vecino con solicitudes",
+    "cuando": "entra a Mis solicitudes",
+    "entonces": "ve material, kg, destino, recolector asignado y estado"
+   }
+  },
+  {
+   "id": "H11",
+   "epica": "E4",
+   "rol": "recolector",
+   "quiero": "ver las solicitudes de recojo disponibles",
+   "para": "planificar mi recorrido sin salir a ciegas",
+   "sp": 3,
+   "moscow": "Must",
+   "sprint": "Sprint 3",
+   "criterios": {
+    "dado": "un recolector autenticado",
+    "cuando": "abre la seccion Recojos",
+    "entonces": "ve las solicitudes pendientes con dirección de recojo y punto de destino"
+   }
+  },
+  {
+   "id": "H12",
+   "epica": "E4",
+   "rol": "recolector",
+   "quiero": "tomar una solicitud y marcarla como entregada en el punto de acopio",
+   "para": "registrar mi trabajo y cobrar por el material",
+   "sp": 5,
+   "moscow": "Must",
+   "sprint": "Sprint 3",
+   "criterios": {
+    "dado": "una solicitud pendiente sin recolector",
+    "cuando": "el recolector la toma",
+    "entonces": "queda asignada a el y desaparece de las disponibles",
+    "y": "otro recolector no puede tomarla"
+   }
+  },
+  {
+   "id": "H13",
+   "epica": "E4",
+   "rol": "operador de acopio",
+   "quiero": "ver las solicitudes dirigidas a mi punto y cambiar su estado",
+   "para": "organizar la recepcion de material",
+   "sp": 5,
+   "moscow": "Must",
+   "sprint": "Sprint 4",
+   "criterios": {
+    "dado": "un operador con solicitudes recibidas",
+    "cuando": "rechaza una solicitud",
+    "entonces": "su estado cambia a Rechazada y se libera la capacidad reservada"
+   }
+  },
+  {
+   "id": "H14",
+   "epica": "E5",
+   "rol": "administrador",
+   "quiero": "suspender o reactivar usuarios y puntos de acopio",
+   "para": "mantener la calidad y seguridad de la red",
+   "sp": 3,
+   "moscow": "Should",
+   "sprint": "Sprint 4",
+   "criterios": {
+    "dado": "un administrador",
+    "cuando": "suspende un punto de acopio",
+    "entonces": "el punto deja de aparecer en la búsqueda"
+   }
+  },
+  {
+   "id": "H15",
+   "epica": "E5",
+   "rol": "administrador",
+   "quiero": "ver indicadores de kg reciclados y solicitudes",
+   "para": "medir el impacto ambiental de la plataforma",
+   "sp": 3,
+   "moscow": "Could",
+   "sprint": "Sprint 4",
+   "criterios": {
+    "dado": "solicitudes entregadas en acopio",
+    "cuando": "se consulta el inicio",
+    "entonces": "se muestran los kg reciclados (solo entregadas) y el total de solicitudes"
+   }
+  },
+  {
+   "id": "H16",
+   "epica": "E1",
+   "rol": "recolector",
+   "quiero": "registrar mi zona de trabajo y vehículo",
+   "para": "recibir solicitudes cercanas en el futuro",
+   "sp": 5,
+   "moscow": "Won't",
+   "sprint": "",
+   "criterios": {
+    "dado": "un recolector autenticado",
+    "cuando": "registra su zona",
+    "entonces": "queda guardada para futuras notificaciones"
+   }
+  }
+ ],
+ "simulacion": {
+  "H01": [
+   [
+    "Sprint 1",
+    1,
+    1,
+    2
+   ]
+  ],
+  "H02": [
+   [
+    "Sprint 1",
+    1,
+    2,
+    3
+   ]
+  ],
+  "H03": [
+   [
+    "Sprint 1",
+    2,
+    3,
+    4
+   ]
+  ],
+  "H04": [
+   [
+    "Sprint 1",
+    3,
+    4,
+    5
+   ]
+  ],
+  "H05": [
+   [
+    "Sprint 2",
+    1,
+    3,
+    4
+   ]
+  ],
+  "H06": [
+   [
+    "Sprint 2",
+    1,
+    2,
+    3
+   ]
+  ],
+  "H07": [
+   [
+    "Sprint 2",
+    2,
+    3,
+    3
+   ]
+  ],
+  "H08": [
+   [
+    "Sprint 2",
+    3,
+    4,
+    5
+   ]
+  ],
+  "H09": [
+   [
+    "Sprint 3",
+    1,
+    3,
+    4
+   ]
+  ],
+  "H10": [
+   [
+    "Sprint 3",
+    2,
+    3,
+    4
+   ]
+  ],
+  "H11": [
+   [
+    "Sprint 3",
+    2,
+    4,
+    5
+   ]
+  ],
+  "H12": [
+   [
+    "Sprint 3",
+    4,
+    null,
+    null
+   ],
+   [
+    "Sprint 4",
+    1,
+    2,
+    2
+   ]
+  ],
+  "H13": [
+   [
+    "Sprint 4",
+    1,
+    3,
+    4
+   ]
+  ],
+  "H14": [
+   [
+    "Sprint 4",
+    2,
+    3,
+    3
+   ]
+  ],
+  "H15": [
+   [
+    "Sprint 4",
+    3,
+    4,
+    5
+   ]
+  ]
+ },
+ "wip": {
+  "In Progress": 3,
+  "In Review": 2
+ },
+ "dependencias": [
+  [
+   "H01",
+   "H03"
+  ],
+  [
+   "H02",
+   "H03"
+  ],
+  [
+   "H03",
+   "H05"
+  ],
+  [
+   "H04",
+   "H05"
+  ],
+  [
+   "H03",
+   "H06"
+  ],
+  [
+   "H05",
+   "H09"
+  ],
+  [
+   "H06",
+   "H09"
+  ],
+  [
+   "H09",
+   "H13"
+  ],
+  [
+   "H11",
+   "H13"
+  ],
+  [
+   "H02",
+   "H14"
+  ]
+ ]
+}
