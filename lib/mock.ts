@@ -27,30 +27,33 @@ export const heroArt = () => {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 };
 
+/** Fotos de Unsplash (licencia Unsplash: uso libre, también comercial). */
+export const foto = (id: string, w = 1200) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
+
 const LUN_SAB = [1, 2, 3, 4, 5, 6];
 export const usuarios: Usuario[] = [
-  { id: "u-lucia", nombre: "Lucia Paredes", rol: "comprador" },
+  { id: "u-lucia", nombre: "Lucía Paredes", rol: "comprador" },
   { id: "u-bodega", nombre: "Bodega Don Pepe", rol: "comprador" },
   { id: "u-juan", nombre: "Juan Ccori", rol: "recolector" },
-  { id: "u-maria", nombre: "Maria Quispe", rol: "recolector" },
+  { id: "u-maria", nombre: "María Quispe", rol: "recolector" },
   { id: "u-carlos", nombre: "Carlos Rivera", rol: "vendedor" },
-  { id: "u-rosa", nombre: "Rosa Diaz", rol: "vendedor" },
+  { id: "u-rosa", nombre: "Rosa Díaz", rol: "vendedor" },
   { id: "u-ana", nombre: "Ana Torres", rol: "vendedor" },
   { id: "u-admin", nombre: "Admin. Municipal", rol: "admin" },
 ];
 export const tiendas: Tienda[] = [
-  { id: "s-ecoacopio-surco", ownerId: "u-carlos", nombre: "EcoAcopio Surco", rubro: "Santiago de Surco", direccion: "Av. Caminos del Inca 1250", horario: { dias: LUN_SAB, abre: "08:00", cierra: "18:00" }, img: ph("EcoAcopio Surco") },
-  { id: "s-recicla-miraflores", ownerId: "u-rosa", nombre: "Recicla Miraflores", rubro: "Miraflores", direccion: "Calle Schell 420", horario: { dias: [1, 2, 3, 4, 5], abre: "09:00", cierra: "17:00" }, img: ph("Recicla Miraflores") },
-  { id: "s-punto-verde-sjl", ownerId: "u-ana", nombre: "Punto Verde SJL", rubro: "San Juan de Lurigancho", direccion: "Av. Próceres 3100", horario: { dias: [0, 1, 2, 3, 4, 5, 6], abre: "07:00", cierra: "20:00" }, img: ph("Punto Verde SJL") },
+  { id: "s-ecoacopio-surco", ownerId: "u-carlos", nombre: "EcoAcopio Surco", rubro: "Santiago de Surco", direccion: "Av. Caminos del Inca 1250", horario: { dias: LUN_SAB, abre: "08:00", cierra: "18:00" }, img: foto("1722482445685-91a6b17d5d02") },
+  { id: "s-recicla-miraflores", ownerId: "u-rosa", nombre: "Recicla Miraflores", rubro: "Miraflores", direccion: "Calle Schell 420", horario: { dias: [1, 2, 3, 4, 5], abre: "09:00", cierra: "17:00" }, img: foto("1611284446314-60a58ac0deb9") },
+  { id: "s-punto-verde-sjl", ownerId: "u-ana", nombre: "Punto Verde SJL", rubro: "San Juan de Lurigancho", direccion: "Av. Próceres 3100", horario: { dias: [0, 1, 2, 3, 4, 5, 6], abre: "07:00", cierra: "20:00" }, img: foto("1532996122724-e3c354a0b15b") },
 ];
 export const productos: Producto[] = [
-  { id: "p-carton-surco", tiendaId: "s-ecoacopio-surco", nombre: "Papel y cartón", descripcion: "Cajas plegadas, periódicos y papel bond. Seco y sin grasa.", precio: 0.4, stock: 800, img: ph("Papel y cartón") },
-  { id: "p-pet-surco", tiendaId: "s-ecoacopio-surco", nombre: "Plástico PET", descripcion: "Botellas de bebidas, enjuagadas y aplastadas.", precio: 0.8, stock: 500, img: ph("Plástico PET") },
-  { id: "p-vidrio-surco", tiendaId: "s-ecoacopio-surco", nombre: "Vidrio", descripcion: "Botellas y frascos sin tapa. No se recibe vidrio plano.", precio: 0.1, stock: 0, img: ph("Vidrio") },
-  { id: "p-latas-miraflores", tiendaId: "s-recicla-miraflores", nombre: "Metal y latas", descripcion: "Latas de aluminio y conservas limpias.", precio: 1.5, stock: 300, img: ph("Metal y latas") },
-  { id: "p-raee-miraflores", tiendaId: "s-recicla-miraflores", nombre: "Electrónicos (RAEE)", descripcion: "Celulares, cargadores, laptops y pequeños electrodomésticos.", precio: 0.5, stock: 150, img: ph("Electronicos RAEE") },
-  { id: "p-pet-sjl", tiendaId: "s-punto-verde-sjl", nombre: "Plástico PET", descripcion: "Botellas PET transparentes y de color.", precio: 0.7, stock: 1200, img: ph("Plástico PET SJL") },
-  { id: "p-carton-sjl", tiendaId: "s-punto-verde-sjl", nombre: "Papel y cartón", descripcion: "Carton corrugado y papel mixto.", precio: 0.35, stock: 1500, img: ph("Papel y cartón SJL") },
+  { id: "p-carton-surco", tiendaId: "s-ecoacopio-surco", nombre: "Papel y cartón", descripcion: "Cajas plegadas, periódicos y papel bond. Seco y sin grasa.", precio: 0.4, stock: 800, img: foto("1513672494107-cd9d848a383e", 800) },
+  { id: "p-pet-surco", tiendaId: "s-ecoacopio-surco", nombre: "Plástico PET", descripcion: "Botellas de bebidas, enjuagadas y aplastadas.", precio: 0.8, stock: 500, img: foto("1571727153934-b9e0059b7ab2", 800) },
+  { id: "p-vidrio-surco", tiendaId: "s-ecoacopio-surco", nombre: "Vidrio", descripcion: "Botellas y frascos sin tapa. No se recibe vidrio plano.", precio: 0.1, stock: 0, img: foto("1481761289552-381112059e05", 800) },
+  { id: "p-latas-miraflores", tiendaId: "s-recicla-miraflores", nombre: "Metal y latas", descripcion: "Latas de aluminio y conservas limpias.", precio: 1.5, stock: 300, img: foto("1554183905-ce6c75652070", 800) },
+  { id: "p-raee-miraflores", tiendaId: "s-recicla-miraflores", nombre: "Electrónicos (RAEE)", descripcion: "Celulares, cargadores, laptops y pequeños electrodomésticos.", precio: 0.5, stock: 150, img: foto("1728610996936-d93900f1886b", 800) },
+  { id: "p-pet-sjl", tiendaId: "s-punto-verde-sjl", nombre: "Plástico PET", descripcion: "Botellas PET transparentes y de color.", precio: 0.7, stock: 1200, img: foto("1756362399416-503694e40cf5", 800) },
+  { id: "p-carton-sjl", tiendaId: "s-punto-verde-sjl", nombre: "Papel y cartón", descripcion: "Cartón corrugado y papel mixto.", precio: 0.35, stock: 1500, img: foto("1781243680823-aae6c7f1ff12", 800) },
 ];
 export const pedidos: Pedido[] = [
   { id: "o-1", compradorId: "u-lucia", productoId: "p-pet-surco", cantidad: 12, precioUnitario: 0.8, estado: "pendiente", fecha: "2026-11-18", direccion: "Jr. Monte Rosa 145, Surco" },

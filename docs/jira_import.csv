@@ -4,66 +4,89 @@ Issue Id,Issue Type,Summary,Description,Story Points,Priority,Labels,Parent,Spri
 Objetivo de negocio: Identificar a cada actor del ecosistema de reciclaje y empezar a formalizar a los recolectores informales.",,High,E1,,
 2,Epic,Red de puntos de acopio,"Registro y búsqueda de puntos de acopio con ubicación, horarios y materiales aceptados.
 
-Objetivo de negocio: Que el vecino sepa donde, cuando y que material puede entregar, reduciendo el reciclable que termina en la basura comun.",,High,E2,,
-3,Epic,Solicitudes de recojo,"Publicacion de material reciclable disponible (tipo, kg y dirección) y seguimiento de su estado.
+Objetivo de negocio: Que el vecino sepa dónde, cuándo y qué material puede entregar, reduciendo el reciclable que termina en la basura común.",,High,E2,,
+3,Epic,Solicitudes de recojo,"Publicación de material reciclable disponible (tipo, kg y dirección) y seguimiento de su estado.
 
 Objetivo de negocio: Hacer visible la oferta de reciclables de hogares y negocios para que llegue a la cadena de reciclaje.",,High,E3,,
 4,Epic,Gestión de recolecciones,"Herramientas para que el recolector tome solicitudes y las entregue, y para que el punto de acopio las reciba.
 
 Objetivo de negocio: Reducir recorridos a ciegas de los recolectores y aumentar los kg recuperados e ingresos.",,High,E4,,
-5,Epic,Administración e indicadores,"Moderacion de usuarios y puntos, e indicadores de impacto (kg reciclados, solicitudes).
+5,Epic,Administración e indicadores,"Moderación de usuarios y puntos, e indicadores de impacto (kg reciclados, solicitudes).
 
 Objetivo de negocio: Garantizar la calidad de la red y medir el impacto ambiental para la municipalidad y aliados.",,High,E5,,
 100,Story,"Como vecino, quiero registrarme e iniciar sesión con mi correo, para acceder a la plataforma de forma segura.","Dado un visitante no autenticado.
-Cuando se registra con correo y contraseña validos.
+Cuando se registra con correo y contraseña válidos.
 Entonces se crea su cuenta e ingresa a su inicio.
-Y si los datos son inválidos ve un mensaje de error.",3,Highest,Must E1,1,Sprint 1
-101,Story,"Como administrador, quiero que cada usuario tenga un rol (vecino, recolector, operador o admin), para mostrar a cada uno solo las funciones que le corresponden.","Dado un usuario autenticado con rol recolector.
+Y, si los datos son inválidos, ve un mensaje de error.
+
+Escenario 2:
+Dado un vecino registrado.
+Cuando inicia sesión con su correo y contraseña correctos.
+Entonces accede a su inicio.
+Y tras 5 intentos fallidos se bloquea temporalmente el acceso.",3,Highest,Must E1,1,Sprint 1
+101,Story,"Como administrador, quiero que cada usuario tenga un rol (vecino, recolector, operador o administrador), para mostrar a cada uno solo las funciones que le corresponden.","Dado un usuario autenticado con rol recolector.
 Cuando ingresa a la plataforma.
 Entonces ve el menú de recojos.
 Y no puede acceder al panel del operador de acopio.",5,Highest,Must E1,1,Sprint 1
-102,Story,"Como operador de acopio, quiero registrar mi punto de acopio con dirección, distrito y horario de atención, para que los vecinos sepan donde y cuando llevar sus reciclables.","Dado un operador autenticado sin punto registrado.
-Cuando completa nombre, distrito, dirección, días y horario validos.
+102,Story,"Como operador de acopio, quiero registrar mi punto de acopio con dirección, distrito y horario de atención, para que los vecinos sepan dónde y cuándo llevar sus reciclables.","Dado un operador autenticado sin punto registrado.
+Cuando completa nombre, distrito, dirección, días y horario válidos.
 Entonces su punto queda publicado.
 Y no puede registrar un segundo punto ni un horario con apertura mayor al cierre.",5,Highest,Must E2,2,Sprint 1
-103,Story,"Como operador de acopio, quiero registrar los materiales que recibo con su pago por kg y capacidad, para que solo me envien material que puedo recibir.","Dado un operador con punto registrado.
-Cuando agrega un material con pago mayor a 0 y capacidad valida.
+103,Story,"Como operador de acopio, quiero registrar los materiales que recibo con su pago por kg y capacidad, para que solo me envíen material que puedo recibir.","Dado un operador con punto registrado.
+Cuando agrega un material con pago mayor a 0 y capacidad válida.
 Entonces el material aparece en su punto.
-Y si el pago es 0 o la capacidad negativa ve un error.",3,Highest,Must E2,2,Sprint 1
+Y, si el pago es 0 o la capacidad negativa, ve un error.",3,Highest,Must E2,2,Sprint 1
 104,Story,"Como vecino, quiero buscar puntos de acopio por material y distrito, para encontrar el punto más conveniente para mis reciclables.","Dado un vecino en la búsqueda.
 Cuando filtra por material Plástico PET y distrito Surco.
 Entonces ve solo los puntos de Surco que reciben PET con capacidad disponible.",5,Highest,Must E2,2,Sprint 2
-105,Story,"Como vecino, quiero ver si un punto de acopio está abierto ahora y sus horarios, para no ir cuando esta cerrado.","Dado un punto que atiende de lunes a sabado de 08:00 a 18:00.
+105,Story,"Como vecino, quiero ver si un punto de acopio está abierto ahora y sus horarios, para no ir cuando está cerrado.","Dado un punto que atiende de lunes a sábado de 08:00 a 18:00.
 Cuando el vecino lo consulta un domingo.
 Entonces el punto aparece como Cerrado.
 Y puede filtrar solo los puntos abiertos ahora.",3,Highest,Must E2,2,Sprint 2
-106,Story,"Como vecino, quiero ver el detalle de un punto con los materiales que recibe y su pago por kg, para saber que puedo entregar y cuanto puedo ganar.","Dado un vecino en la lista de puntos.
+106,Story,"Como vecino, quiero ver el detalle de un punto con los materiales que recibe y su pago por kg, para saber qué puedo entregar y cuánto puedo ganar.","Dado un vecino en la lista de puntos.
 Cuando abre el detalle de un punto.
 Entonces ve dirección, horario, materiales, pago por kg y capacidad disponible.",2,High,Should E2,2,Sprint 2
 107,Story,"Como operador de acopio, quiero editar los datos y el horario de mi punto, para mantener la información actualizada.","Dado un operador con punto registrado.
 Cuando modifica el horario y guarda.
 Entonces los vecinos ven el horario actualizado.",2,High,Should E2,2,Sprint 2
 108,Story,"Como vecino, quiero solicitar el recojo de mis reciclables indicando material, kg y dirección, para que un recolector los lleve al punto de acopio.","Dado un vecino y un material con capacidad disponible.
-Cuando confirma la solicitud con kg validos y dirección.
+Cuando confirma la solicitud con kg válidos y dirección.
 Entonces la solicitud se crea en estado Pendiente y se reserva la capacidad.
-Y si los kg superan la capacidad ve un error.",8,Highest,Must E3,3,Sprint 3
-109,Story,"Como vecino, quiero ver el estado de mis solicitudes y que recolector las atiende, para saber cuando pasaran por mi material.","Dado un vecino con solicitudes.
+Y, si los kg superan la capacidad, ve un error.",8,Highest,Must E3,3,Sprint 3
+109,Story,"Como vecino, quiero ver el estado de mis solicitudes y qué recolector las atiende, para saber cuándo pasarán por mi material.","Dado un vecino con solicitudes.
 Cuando entra a Mis solicitudes.
 Entonces ve material, kg, destino, recolector asignado y estado.",3,Highest,Must E3,3,Sprint 3
 110,Story,"Como recolector, quiero ver las solicitudes de recojo disponibles, para planificar mi recorrido sin salir a ciegas.","Dado un recolector autenticado.
-Cuando abre la seccion Recojos.
+Cuando abre la sección Recojos.
 Entonces ve las solicitudes pendientes con dirección de recojo y punto de destino.",3,Highest,Must E4,4,Sprint 3
-111,Story,"Como recolector, quiero tomar una solicitud y marcarla como entregada en el punto de acopio, para registrar mi trabajo y cobrar por el material.","Dado una solicitud pendiente sin recolector.
+111,Story,"Como recolector, quiero tomar una solicitud y marcarla como entregada en el punto de acopio, para registrar mi trabajo y cobrar por el material.","Dada una solicitud pendiente sin recolector.
 Cuando el recolector la toma.
-Entonces queda asignada a el y desaparece de las disponibles.
-Y otro recolector no puede tomarla.",5,Highest,Must E4,4,Sprint 4
-112,Story,"Como operador de acopio, quiero ver las solicitudes dirigidas a mi punto y cambiar su estado, para organizar la recepcion de material.","Dado un operador con solicitudes recibidas.
+Entonces queda asignada a él y desaparece de las disponibles.
+Y otro recolector no puede tomarla.
+
+Escenario 2:
+Dada una solicitud asignada al recolector.
+Cuando la marca como entregada en el punto de acopio.
+Entonces su estado cambia a Entregada en acopio y suma a los kg reciclados.",5,Highest,Must E4,4,Sprint 4
+112,Story,"Como operador de acopio, quiero ver las solicitudes dirigidas a mi punto y cambiar su estado, para organizar la recepción de material.","Dado un operador con solicitudes recibidas.
 Cuando rechaza una solicitud.
-Entonces su estado cambia a Rechazada y se libera la capacidad reservada.",5,Highest,Must E4,4,Sprint 4
+Entonces su estado cambia a Rechazada y se libera la capacidad reservada.
+
+Escenario 2:
+Dado un operador con solicitudes recibidas.
+Cuando abre su panel.
+Entonces ve cada solicitud con material, kg, vecino, recolector y estado.
+Y solo puede pasarla a Entregada o Rechazada, según su estado actual.",5,Highest,Must E4,4,Sprint 4
 113,Story,"Como administrador, quiero suspender o reactivar usuarios y puntos de acopio, para mantener la calidad y seguridad de la red.","Dado un administrador.
 Cuando suspende un punto de acopio.
-Entonces el punto deja de aparecer en la búsqueda.",3,High,Should E5,5,Sprint 4
-114,Story,"Como administrador, quiero ver indicadores de kg reciclados y solicitudes, para medir el impacto ambiental de la plataforma.","Dado solicitudes entregadas en acopio.
+Entonces el punto deja de aparecer en la búsqueda.
+
+Escenario 2:
+Dado un usuario o punto suspendido.
+Cuando el administrador lo reactiva.
+Entonces vuelve a aparecer en la plataforma.
+Y un usuario suspendido no puede crear solicitudes ni tomar recojos.",3,High,Should E5,5,Sprint 4
+114,Story,"Como administrador, quiero ver indicadores de kg reciclados y solicitudes, para medir el impacto ambiental de la plataforma.","Dadas solicitudes entregadas en acopio.
 Cuando se consulta el inicio.
 Entonces se muestran los kg reciclados (solo entregadas) y el total de solicitudes.",3,Medium,Could E5,5,Sprint 4
 115,Story,"Como recolector, quiero registrar mi zona de trabajo y vehículo, para recibir solicitudes cercanas en el futuro.","Dado un recolector autenticado.

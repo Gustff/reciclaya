@@ -39,7 +39,7 @@ export default function Recolector() {
       </div>
       <div className="card">
         <h2 className="p-5 text-lg font-semibold">Mis recojos ({mios.length})</h2>
-        {mios.map((o) => fila(o, o.estado === "aceptado" ? <button className="btn-ghost py-1" onClick={() => cambiarEstado(o.id, "entregado")}>Marcar entregado</button> : null))}
+        {mios.map((o) => fila(o, o.estado === "aceptado" ? <button className="btn-ghost py-1" onClick={() => setMsg(cambiarEstado(o.id, "entregado") ?? "")}>Marcar entregado</button> : null))}
       </div>
     </div>
   );

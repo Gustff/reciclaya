@@ -1,5 +1,7 @@
 # Pipeline CI/CD DevSecOps de ReciclaYa
-# Etapas: 1) Build  2) Test  3) Seguridad (SAST CodeQL, dependencias, secretos)  4) Deploy (Vercel) + smoke test
+# Etapas: 1) Build  2) Test  3) Seguridad (SAST CodeQL, dependencias, secretos)
+#         4) Deploy: Vercel publica automáticamente cada push (integración Git); este job espera ese
+#            deploy del MISMO commit y lo verifica en producción (smoke test + cabeceras de seguridad).
 name: CI-CD DevSecOps
 on:
   push:
@@ -34,7 +36,7 @@ jobs:
               ok = "✅" if c.find("failure") is None else "❌"
               print(f"- {ok} {c.get('classname')} › {c.get('name')}")
           PY
-      - name: Build de produccion (Next.js)
+      - name: Build de producción (Next.js)
         run: pnpm build
 
   sast:
@@ -52,7 +54,7 @@ jobs:
       - uses: github/codeql-action/analyze@v3
 
   dependencias:
-    name: 3b Seguridad - Analisis de dependencias
+    name: 3b Seguridad - Análisis de dependencias
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -64,9 +66,9 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - name: Auditoria de vulnerabilidades (falla con severidad alta o critica)
+      - name: Auditoría de vulnerabilidades (falla con severidad alta o crítica)
         run: pnpm audit --audit-level=high
-      - name: Revision de dependencias nuevas del PR
+      - name: Revisión de dependencias nuevas del PR
         if: github.event_name == 'pull_request'
         uses: actions/dependency-review-action@v4
         with:
@@ -83,19 +85,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-verificacion:
-    name: 4 Deploy en Vercel y smoke test
+    name: 4 Deploy en Vercel y verificación en producción
     needs: [build-test, sast, dependencias, secretos]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      statuses: read
     steps:
-      - name: Smoke test de la URL publica (reintenta hasta 5 min mientras Vercel publica)
+      - name: Esperar el deploy de Vercel de este commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for i in $(seq 1 40); do
+            estado=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/status" -q '.statuses[] | select(.context=="Vercel") | .state' | head -1)
+            echo "Deploy de Vercel para ${GITHUB_SHA::7}: ${estado:-sin estado} ($i)"
+            [ "$estado" = "success" ] && exit 0
+            [ "$estado" = "failure" ] || [ "$estado" = "error" ] && exit 1
+            sleep 15
+          done
+          echo "Vercel no confirmó el deploy a tiempo"; exit 1
+      - name: Smoke test de rutas en producción
         env:
           URL: ${{ vars.PROD_URL }}
         run: |
-          for i in $(seq 1 30); do curl -sf -o /dev/null "$URL" && break; echo "esperando deploy... ($i)"; sleep 10; done
-          for ruta in / /puntos /recolector /acopio /mis-solicitudes; do
+          for ruta in / /puntos /recolector /acopio /mis-solicitudes /admin; do
             code=$(curl -s -o /dev/null -w "%{http_code}" "$URL$ruta")
             echo "$ruta -> $code"; test "$code" = "200"
           done
-          echo "Cabeceras de seguridad en produccion:"
-          curl -sI "$URL" | grep -i -E "x-frame-options|x-content-type-options|strict-transport-security|referrer-policy"
+      - name: Verificar cada cabecera de seguridad
+        env:
+          URL: ${{ vars.PROD_URL }}
+        run: |
+          h=$(curl -sI "$URL")
+          for c in "x-frame-options: deny" "x-content-type-options: nosniff" "strict-transport-security: max-age=63072000" "referrer-policy: strict-origin-when-cross-origin" "permissions-policy:"; do
+            echo "$h" | tr 'A-Z' 'a-z' | grep -q "$c" && echo "OK  $c" || { echo "FALTA  $c"; exit 1; }
+          done
+          echo "$h" | tr 'A-Z' 'a-z' | grep -q "x-powered-by" && { echo "Expone X-Powered-By"; exit 1; } || echo "OK  sin x-powered-by"

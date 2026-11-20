@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div><p className="mb-3 font-bold text-white">Recolectores</p><ul className="space-y-2"><li>Recojos disponibles</li><li>Mis recojos</li><li>Formalización</li></ul></div>
               <div><p className="mb-3 font-bold text-white">Proyecto</p><ul className="space-y-2"><li>MVP con datos de prueba</li><li>Next.js · Supabase · Vercel</li><li>Práctica Calificada 2 · PFC III</li></ul></div>
             </div>
-            <div className="border-t border-neutral-800 py-5 text-center text-xs">© 2026 {APP.nombre}{APP.acento}. Proyecto académico.</div>
+            <div className="border-t border-neutral-800 py-5 text-center text-xs">© 2026 {APP.nombre}{APP.acento}. Proyecto académico. Fotografías: Unsplash (licencia Unsplash).</div>
           </footer>
         </StoreProvider>
       </body>

@@ -10,11 +10,11 @@ export default function MiPunto() {
   const vacia: Tienda = { id: "", ownerId: yo.id, nombre: "", rubro: "", direccion: "", horario: { dias: [1, 2, 3, 4, 5, 6], abre: "08:00", cierra: "18:00" }, img: "" };
   const [f, setF] = useState<Tienda>(actual ?? vacia);
   const [msg, setMsg] = useState<{ ok: boolean; t: string } | null>(null);
-  useEffect(() => { setF(actual ?? { ...vacia, ownerId: yo.id }); setMsg(null); }, [yo.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setF(actual ?? { ...vacia, ownerId: yo.id }); }, [yo.id, actual?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   if (yo.rol !== "vendedor") return <p className="p-10">Solo para {L.vendedor.toLowerCase()}.</p>;
   const save = () => { const e = guardarTienda(f); setMsg(e ? { ok: false, t: e } : { ok: true, t: `${L.tienda} guardado correctamente` }); };
   const campo = (k: "nombre" | "rubro" | "direccion", label: string) => (
-    <div><label className="label">{label}</label><input className="input" value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} /></div>
+    <div><label className="label" htmlFor={k}>{label}</label><input id={k} className="input" value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} /></div>
   );
   const toggleDia = (d: number) => setF({ ...f, horario: { ...f.horario, dias: f.horario.dias.includes(d) ? f.horario.dias.filter((x) => x !== d) : [...f.horario.dias, d].sort() } });
   return (
@@ -25,12 +25,12 @@ export default function MiPunto() {
         <div>
           <label className="label">Días de atención</label>
           <div className="flex flex-wrap gap-2">{DIAS.map((d, i) => (
-            <button key={d} type="button" onClick={() => toggleDia(i)} className={`rounded-md border px-3 py-1 text-sm ${f.horario.dias.includes(i) ? "border-brand bg-emerald-50 text-brand" : "border-neutral-300"}`}>{d}</button>
+            <button key={d} type="button" aria-pressed={f.horario.dias.includes(i)} onClick={() => toggleDia(i)} className={`rounded-md border px-3 py-1 text-sm ${f.horario.dias.includes(i) ? "border-brand bg-emerald-50 text-brand" : "border-neutral-300"}`}>{d}</button>
           ))}</div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div><label className="label">Abre</label><input type="time" className="input" value={f.horario.abre} onChange={(e) => setF({ ...f, horario: { ...f.horario, abre: e.target.value } })} /></div>
-          <div><label className="label">Cierra</label><input type="time" className="input" value={f.horario.cierra} onChange={(e) => setF({ ...f, horario: { ...f.horario, cierra: e.target.value } })} /></div>
+          <div><label className="label" htmlFor="abre">Abre</label><input id="abre" type="time" className="input" value={f.horario.abre} onChange={(e) => setF({ ...f, horario: { ...f.horario, abre: e.target.value } })} /></div>
+          <div><label className="label" htmlFor="cierra">Cierra</label><input id="cierra" type="time" className="input" value={f.horario.cierra} onChange={(e) => setF({ ...f, horario: { ...f.horario, cierra: e.target.value } })} /></div>
         </div>
         {msg && <p role="alert" className={`rounded-md px-3 py-2 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}`}>{msg.t}</p>}
         <button className="btn-primary w-full" onClick={save}>Guardar</button>

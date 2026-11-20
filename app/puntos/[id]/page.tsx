@@ -9,7 +9,7 @@ export default function PuntoDetalle() {
   const { id } = useParams<{ id: string }>();
   const { tiendas, productos, usuarios, yo } = useStore();
   const t = tiendas.find((x) => x.id === id);
-  if (!t) return <p className="p-10">{L.tienda} no encontrado.</p>;
+  if (!t || t.suspendida) return <p className="p-10">{L.tienda} no disponible.</p>;
   const ps = productos.filter((p) => p.tiendaId === t.id);
   return (
     <div className="mx-auto max-w-7xl px-6 py-14">

@@ -31,6 +31,7 @@ export default function Nav() {
           </select>
         </div>
       </div>
+      {yo.suspendido && <div className="bg-red-600 px-6 py-2 text-center text-sm font-semibold text-white">Tu cuenta está suspendida: no puedes crear solicitudes ni tomar recojos.</div>}
     </header>
   );
 }
