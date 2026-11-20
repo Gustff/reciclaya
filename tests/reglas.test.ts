@@ -29,7 +29,7 @@ describe("validarPedido (HU: solicitar recojo de reciclables)", () => {
     expect(validarPedido(conCap, -3, "comprador", "x")).not.toBeNull();
     expect(validarPedido(conCap, 1.5, "comprador", "x")).not.toBeNull();
   });
-  it("exige direccion de recojo", () => expect(validarPedido(conCap, 2, "comprador", "  ")).toMatch(/direccion/));
+  it("exige direccion de recojo", () => expect(validarPedido(conCap, 2, "comprador", "  ")).toMatch(/dirección/));
   it("solo el rol vecino puede solicitar", () => {
     expect(validarPedido(conCap, 1, "recolector", "x")).not.toBeNull();
     expect(validarPedido(conCap, 1, "vendedor", "x")).not.toBeNull();
