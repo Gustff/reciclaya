@@ -4,7 +4,7 @@ import type { Producto } from "@/lib/mock";
 
 export default function ProductCard({ p, tienda, puedePedir }: { p: Producto; tienda?: string; puedePedir?: boolean }) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-3xl bg-soft transition hover:shadow-xl">
+    <div className="lift group flex h-full flex-col overflow-hidden rounded-3xl bg-soft">
       <div className="relative aspect-[4/3] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={p.img} alt={p.nombre} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />

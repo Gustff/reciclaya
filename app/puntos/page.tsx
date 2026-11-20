@@ -39,7 +39,7 @@ export default function Puntos() {
       <h2 className="mt-8 mb-3 text-lg font-semibold">{ts.length} resultado(s)</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {ts.map((t) => (
-          <Link key={t.id} href={`/puntos/${t.id}`} className="group overflow-hidden rounded-3xl bg-soft transition hover:shadow-xl">
+          <Link key={t.id} href={`/puntos/${t.id}`} className="lift group overflow-hidden rounded-3xl bg-soft">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={t.img} alt={t.nombre} className="aspect-[16/9] w-full object-cover transition duration-500 group-hover:scale-105" />
             <div className="space-y-2 p-6">

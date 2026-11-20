@@ -17,3 +17,23 @@ h1, h2, h3 { letter-spacing: -0.03em; }
 @utility input { @apply w-full rounded-xl border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-black; }
 @utility label { @apply mb-1.5 block text-xs font-bold uppercase tracking-wide text-neutral-500; }
 @utility eyebrow { @apply text-xs font-bold uppercase tracking-[0.2em]; }
+
+/* ---------- Animaciones (respetan prefers-reduced-motion) ---------- */
+@keyframes fade-up { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes shimmer { from { background-position: 0% 50%; } to { background-position: 200% 50%; } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(0, 168, 98, .45); } 100% { box-shadow: 0 0 0 14px rgba(0, 168, 98, 0); } }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal.visible { opacity: 1; transform: none; }
+.anim-fade-up { animation: fade-up .9s cubic-bezier(.2,.7,.2,1) both; }
+.anim-float { animation: float 6s ease-in-out infinite; }
+.anim-spin-slow { animation: spin-slow 40s linear infinite; }
+.text-shimmer { background-size: 200% auto; animation: shimmer 6s linear infinite; }
+.pulse-dot { animation: pulse-ring 1.8s ease-out infinite; }
+.lift { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+.lift:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -24px rgba(0,0,0,.35); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .anim-fade-up, .anim-float, .anim-spin-slow, .text-shimmer, .pulse-dot { animation: none; }
+}
