@@ -11,7 +11,7 @@
    "clave": "E2",
    "nombre": "Red de puntos de acopio",
    "descripcion": "Registro y búsqueda de puntos de acopio con ubicación, horarios y materiales aceptados.",
-   "objetivo": "Que el vecino sepa donde, cuando y que material puede entregar, reduciendo el reciclable que termina en la basura comun."
+   "objetivo": "Que el vecino sepa dónde, cuándo y qué material puede entregar, reduciendo el reciclable que termina en la basura comun."
   },
   {
    "clave": "E3",
@@ -159,7 +159,7 @@
    "epica": "E2",
    "rol": "vecino",
    "quiero": "ver el detalle de un punto con los materiales que recibe y su pago por kg",
-   "para": "saber que puedo entregar y cuanto puedo ganar",
+   "para": "saber qué puedo entregar y cuánto puedo ganar",
    "sp": 2,
    "moscow": "Should",
    "sprint": "Sprint 2",
@@ -204,8 +204,8 @@
    "id": "H10",
    "epica": "E3",
    "rol": "vecino",
-   "quiero": "ver el estado de mis solicitudes y que recolector las atiende",
-   "para": "saber cuando pasaran por mi material",
+   "quiero": "ver el estado de mis solicitudes y qué recolector las atiende",
+   "para": "saber cuándo pasarán por mi material",
    "sp": 3,
    "moscow": "Must",
    "sprint": "Sprint 3",
