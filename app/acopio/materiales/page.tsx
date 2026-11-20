@@ -3,12 +3,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { fmt, L } from "@/lib/config";
 import { useStore } from "@/lib/store";
+import Acceso from "@/components/Acceso";
 
 export default function MisMateriales() {
   const { yo, tiendas, productos, eliminarProducto } = useStore();
   const [msg, setMsg] = useState("");
   const t = tiendas.find((x) => x.ownerId === yo.id);
-  if (yo.rol !== "vendedor" || !t) return <p className="p-10">Necesitas ser {L.vendedor.toLowerCase()} con {L.tienda.toLowerCase()} registrado.</p>;
+  if (yo.rol !== "vendedor") return <Acceso rol={L.vendedor.toLowerCase()} />;
+  if (!t) return <p className="p-10">Primero registra tu {L.tienda.toLowerCase()} en «Mi punto».</p>;
   const ps = productos.filter((p) => p.tiendaId === t.id);
   return (
     <div className="mx-auto max-w-7xl px-6 py-14">

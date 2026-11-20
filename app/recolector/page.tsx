@@ -3,12 +3,13 @@ import { useState } from "react";
 import { fmt, L } from "@/lib/config";
 import { useStore } from "@/lib/store";
 import EstadoBadge from "@/components/EstadoBadge";
+import Acceso from "@/components/Acceso";
 import type { Pedido } from "@/lib/mock";
 
 export default function Recolector() {
   const { yo, pedidos, productos, tiendas, usuarios, tomarRecojo, cambiarEstado } = useStore();
   const [msg, setMsg] = useState("");
-  if (yo.rol !== "recolector") return <p className="p-10">Selecciona un usuario {L.recolector.toLowerCase()} arriba a la derecha.</p>;
+  if (yo.rol !== "recolector") return <Acceso rol={L.recolector.toLowerCase()} />;
   const info = (o: Pedido) => {
     const p = productos.find((x) => x.id === o.productoId);
     return { p, t: tiendas.find((x) => x.id === p?.tiendaId), v: usuarios.find((u) => u.id === o.compradorId) };

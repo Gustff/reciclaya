@@ -5,12 +5,13 @@ import { ESTADO_LABEL, fmt, L } from "@/lib/config";
 import { useStore } from "@/lib/store";
 import type { Estado } from "@/lib/mock";
 import EstadoBadge from "@/components/EstadoBadge";
+import Acceso from "@/components/Acceso";
 import { kgReciclados, pagoEstimado, transicionesPermitidas } from "@/lib/reglas";
 
 export default function PanelAcopio() {
   const { yo, tiendas, productos, pedidos, usuarios, cambiarEstado } = useStore();
   const [msg, setMsg] = useState("");
-  if (yo.rol !== "vendedor") return <p className="p-10">Selecciona un usuario {L.vendedor.toLowerCase()} arriba a la derecha.</p>;
+  if (yo.rol !== "vendedor") return <Acceso rol={L.vendedor.toLowerCase()} />;
   const t = tiendas.find((x) => x.ownerId === yo.id);
   if (!t) return (
     <div className="mx-auto max-w-xl px-4 py-16 text-center">
