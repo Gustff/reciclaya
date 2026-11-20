@@ -83,6 +83,10 @@ jobs:
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Escaneo de secretos en TODO el historial de git
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source=/repo --redact --verbose --exit-code 1 2>&1 | tee gitleaks-historial.log
+          grep -E "commits scanned" gitleaks-historial.log
 
   deploy-verificacion:
     name: 4 Deploy en Vercel y verificación en producción
