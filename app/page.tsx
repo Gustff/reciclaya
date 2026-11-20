@@ -2,15 +2,15 @@
 import Link from "next/link";
 import { APP, L } from "@/lib/config";
 import { useStore } from "@/lib/store";
-import { heroArt } from "@/lib/mock";
+import { foto, heroArt } from "@/lib/mock";
 import { kgReciclados } from "@/lib/reglas";
 import ProductCard from "@/components/ProductCard";
 import Reveal, { Contador } from "@/components/Reveal";
 
 const PASOS = [
-  ["01", "Encuentra tu punto", "Filtra por material, distrito y horario. Sabrás al instante si el punto está abierto."],
-  ["02", "Solicita el recojo", "Indica el material, los kilos aproximados y tu dirección. Sin llamadas ni esperas."],
-  ["03", "Un recolector lo lleva", "Recolectores de tu zona toman la solicitud y la entregan en el punto de acopio."],
+  ["01", "1604187351574-c75ca79f5807", "Encuentra tu punto", "Filtra por material, distrito y horario. Sabrás al instante si el punto está abierto."],
+  ["02", "1642631171488-23d631eba638", "Solicita el recojo", "Indica el material, los kilos aproximados y tu dirección. Sin llamadas ni esperas."],
+  ["03", "1559073760-0ee41703dbf7", "Un recolector lo lleva", "Recolectores de tu zona toman la solicitud y la entregan en el punto de acopio."],
 ];
 
 export default function Home() {
@@ -50,11 +50,15 @@ export default function Home() {
         <Reveal><p className="eyebrow text-center text-brand">Cómo funciona</p>
         <h2 className="mt-3 text-center text-4xl font-black md:text-5xl">Reciclar nunca fue tan simple</h2></Reveal>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {PASOS.map(([n, t, d], i) => (
-            <Reveal key={n} delay={i * 120} className="lift rounded-3xl bg-soft p-8">
+          {PASOS.map(([n, img, t, d], i) => (
+            <Reveal key={n} delay={i * 120} className="lift overflow-hidden rounded-3xl bg-soft">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={foto(img, 800)} alt={t} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+              <div className="p-8">
               <p className="text-5xl font-black text-neutral-300">{n}</p>
               <h3 className="mt-6 text-xl font-bold">{t}</h3>
               <p className="mt-2 text-neutral-600">{d}</p>
+              </div>
             </Reveal>
           ))}
         </div>
@@ -78,7 +82,8 @@ export default function Home() {
             <p className="mt-4 text-neutral-700">Mira las solicitudes cercanas, toma las que te convienen y entrégalas en el punto de acopio. Menos recorridos a ciegas, más ingresos.</p>
             <Link href="/recolector?as=u-juan" className="btn-primary mt-8">Probar como recolector</Link>
           </div>
-          <div className="anim-float text-center text-[160px] leading-none">🚲</div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={foto("1574974671999-24b7dfbb0d53")} alt="Recolectores cargando material reciclable" loading="lazy" className="aspect-[4/3] w-full rounded-3xl object-cover shadow-2xl" />
         </div></Reveal>
       </section>
     </>
