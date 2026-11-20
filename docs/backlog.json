@@ -11,12 +11,12 @@
    "clave": "E2",
    "nombre": "Red de puntos de acopio",
    "descripcion": "Registro y búsqueda de puntos de acopio con ubicación, horarios y materiales aceptados.",
-   "objetivo": "Que el vecino sepa dónde, cuándo y qué material puede entregar, reduciendo el reciclable que termina en la basura comun."
+   "objetivo": "Que el vecino sepa dónde, cuándo y qué material puede entregar, reduciendo el reciclable que termina en la basura común."
   },
   {
    "clave": "E3",
    "nombre": "Solicitudes de recojo",
-   "descripcion": "Publicacion de material reciclable disponible (tipo, kg y dirección) y seguimiento de su estado.",
+   "descripcion": "Publicación de material reciclable disponible (tipo, kg y dirección) y seguimiento de su estado.",
    "objetivo": "Hacer visible la oferta de reciclables de hogares y negocios para que llegue a la cadena de reciclaje."
   },
   {
@@ -28,7 +28,7 @@
   {
    "clave": "E5",
    "nombre": "Administración e indicadores",
-   "descripcion": "Moderacion de usuarios y puntos, e indicadores de impacto (kg reciclados, solicitudes).",
+   "descripcion": "Moderación de usuarios y puntos, e indicadores de impacto (kg reciclados, solicitudes).",
    "objetivo": "Garantizar la calidad de la red y medir el impacto ambiental para la municipalidad y aliados."
   }
  ],
@@ -37,25 +37,29 @@
    "nombre": "Sprint 1",
    "inicio": "2026-11-23",
    "fin": "2026-11-27",
-   "objetivo": "Usuarios con roles pueden registrarse y los operadores publican su punto de acopio con horario."
+   "objetivo": "Usuarios con roles pueden registrarse y los operadores publican su punto de acopio con horario.",
+   "resultado": "Cumplido"
   },
   {
    "nombre": "Sprint 2",
    "inicio": "2026-11-30",
    "fin": "2026-12-04",
-   "objetivo": "El vecino encuentra puntos por material, distrito y horario, y ve los materiales que recibe cada uno."
+   "objetivo": "El vecino encuentra puntos por material, distrito y horario, y ve los materiales que recibe cada uno.",
+   "resultado": "Cumplido"
   },
   {
    "nombre": "Sprint 3",
    "inicio": "2026-12-07",
    "fin": "2026-12-11",
-   "objetivo": "El vecino solicita recojos y el recolector puede tomarlos y entregarlos."
+   "objetivo": "El vecino solicita recojos y el recolector puede tomarlos y entregarlos.",
+   "resultado": "Parcialmente cumplido: el recolector ya ve y toma recojos (H11), pero marcar la entrega (H12) pasó al Sprint 4"
   },
   {
    "nombre": "Sprint 4",
    "inicio": "2026-12-14",
    "fin": "2026-12-18",
-   "objetivo": "El punto de acopio atiende solicitudes y el administrador modera y mide el impacto; release 1.0."
+   "objetivo": "El punto de acopio atiende solicitudes y el administrador modera y mide el impacto; release 1.0.",
+   "resultado": "Cumplido: release 1.0 en producción"
   }
  ],
  "historias": [
@@ -70,16 +74,23 @@
    "sprint": "Sprint 1",
    "criterios": {
     "dado": "un visitante no autenticado",
-    "cuando": "se registra con correo y contraseña validos",
+    "cuando": "se registra con correo y contraseña válidos",
     "entonces": "se crea su cuenta e ingresa a su inicio",
-    "y": "si los datos son inválidos ve un mensaje de error"
+    "y": "si los datos son inválidos, ve un mensaje de error"
+   },
+   "corto": "Registro e inicio de sesión",
+   "criterios2": {
+    "dado": "un vecino registrado",
+    "cuando": "inicia sesión con su correo y contraseña correctos",
+    "entonces": "accede a su inicio",
+    "y": "tras 5 intentos fallidos se bloquea temporalmente el acceso"
    }
   },
   {
    "id": "H02",
    "epica": "E1",
    "rol": "administrador",
-   "quiero": "que cada usuario tenga un rol (vecino, recolector, operador o admin)",
+   "quiero": "que cada usuario tenga un rol (vecino, recolector, operador o administrador)",
    "para": "mostrar a cada uno solo las funciones que le corresponden",
    "sp": 5,
    "moscow": "Must",
@@ -89,39 +100,42 @@
     "cuando": "ingresa a la plataforma",
     "entonces": "ve el menú de recojos",
     "y": "no puede acceder al panel del operador de acopio"
-   }
+   },
+   "corto": "Roles de usuario"
   },
   {
    "id": "H03",
    "epica": "E2",
    "rol": "operador de acopio",
    "quiero": "registrar mi punto de acopio con dirección, distrito y horario de atención",
-   "para": "que los vecinos sepan donde y cuando llevar sus reciclables",
+   "para": "que los vecinos sepan dónde y cuándo llevar sus reciclables",
    "sp": 5,
    "moscow": "Must",
    "sprint": "Sprint 1",
    "criterios": {
     "dado": "un operador autenticado sin punto registrado",
-    "cuando": "completa nombre, distrito, dirección, días y horario validos",
+    "cuando": "completa nombre, distrito, dirección, días y horario válidos",
     "entonces": "su punto queda publicado",
     "y": "no puede registrar un segundo punto ni un horario con apertura mayor al cierre"
-   }
+   },
+   "corto": "Registrar punto de acopio"
   },
   {
    "id": "H04",
    "epica": "E2",
    "rol": "operador de acopio",
    "quiero": "registrar los materiales que recibo con su pago por kg y capacidad",
-   "para": "que solo me envien material que puedo recibir",
+   "para": "que solo me envíen material que puedo recibir",
    "sp": 3,
    "moscow": "Must",
    "sprint": "Sprint 1",
    "criterios": {
     "dado": "un operador con punto registrado",
-    "cuando": "agrega un material con pago mayor a 0 y capacidad valida",
+    "cuando": "agrega un material con pago mayor a 0 y capacidad válida",
     "entonces": "el material aparece en su punto",
-    "y": "si el pago es 0 o la capacidad negativa ve un error"
-   }
+    "y": "si el pago es 0 o la capacidad negativa, ve un error"
+   },
+   "corto": "Materiales del punto"
   },
   {
    "id": "H05",
@@ -136,23 +150,25 @@
     "dado": "un vecino en la búsqueda",
     "cuando": "filtra por material Plástico PET y distrito Surco",
     "entonces": "ve solo los puntos de Surco que reciben PET con capacidad disponible"
-   }
+   },
+   "corto": "Buscar puntos"
   },
   {
    "id": "H06",
    "epica": "E2",
    "rol": "vecino",
    "quiero": "ver si un punto de acopio está abierto ahora y sus horarios",
-   "para": "no ir cuando esta cerrado",
+   "para": "no ir cuando está cerrado",
    "sp": 3,
    "moscow": "Must",
    "sprint": "Sprint 2",
    "criterios": {
-    "dado": "un punto que atiende de lunes a sabado de 08:00 a 18:00",
+    "dado": "un punto que atiende de lunes a sábado de 08:00 a 18:00",
     "cuando": "el vecino lo consulta un domingo",
     "entonces": "el punto aparece como Cerrado",
     "y": "puede filtrar solo los puntos abiertos ahora"
-   }
+   },
+   "corto": "Horario y abierto ahora"
   },
   {
    "id": "H07",
@@ -167,7 +183,8 @@
     "dado": "un vecino en la lista de puntos",
     "cuando": "abre el detalle de un punto",
     "entonces": "ve dirección, horario, materiales, pago por kg y capacidad disponible"
-   }
+   },
+   "corto": "Detalle del punto"
   },
   {
    "id": "H08",
@@ -182,7 +199,8 @@
     "dado": "un operador con punto registrado",
     "cuando": "modifica el horario y guarda",
     "entonces": "los vecinos ven el horario actualizado"
-   }
+   },
+   "corto": "Editar punto y horario"
   },
   {
    "id": "H09",
@@ -195,10 +213,11 @@
    "sprint": "Sprint 3",
    "criterios": {
     "dado": "un vecino y un material con capacidad disponible",
-    "cuando": "confirma la solicitud con kg validos y dirección",
+    "cuando": "confirma la solicitud con kg válidos y dirección",
     "entonces": "la solicitud se crea en estado Pendiente y se reserva la capacidad",
-    "y": "si los kg superan la capacidad ve un error"
-   }
+    "y": "si los kg superan la capacidad, ve un error"
+   },
+   "corto": "Solicitar recojo"
   },
   {
    "id": "H10",
@@ -213,7 +232,8 @@
     "dado": "un vecino con solicitudes",
     "cuando": "entra a Mis solicitudes",
     "entonces": "ve material, kg, destino, recolector asignado y estado"
-   }
+   },
+   "corto": "Mis solicitudes"
   },
   {
    "id": "H11",
@@ -226,9 +246,10 @@
    "sprint": "Sprint 3",
    "criterios": {
     "dado": "un recolector autenticado",
-    "cuando": "abre la seccion Recojos",
+    "cuando": "abre la sección Recojos",
     "entonces": "ve las solicitudes pendientes con dirección de recojo y punto de destino"
-   }
+   },
+   "corto": "Recojos disponibles"
   },
   {
    "id": "H12",
@@ -242,8 +263,14 @@
    "criterios": {
     "dado": "una solicitud pendiente sin recolector",
     "cuando": "el recolector la toma",
-    "entonces": "queda asignada a el y desaparece de las disponibles",
+    "entonces": "queda asignada a él y desaparece de las disponibles",
     "y": "otro recolector no puede tomarla"
+   },
+   "corto": "Tomar y entregar recojo",
+   "criterios2": {
+    "dado": "una solicitud asignada al recolector",
+    "cuando": "la marca como entregada en el punto de acopio",
+    "entonces": "su estado cambia a Entregada en acopio y suma a los kg reciclados"
    }
   },
   {
@@ -251,7 +278,7 @@
    "epica": "E4",
    "rol": "operador de acopio",
    "quiero": "ver las solicitudes dirigidas a mi punto y cambiar su estado",
-   "para": "organizar la recepcion de material",
+   "para": "organizar la recepción de material",
    "sp": 5,
    "moscow": "Must",
    "sprint": "Sprint 4",
@@ -259,6 +286,13 @@
     "dado": "un operador con solicitudes recibidas",
     "cuando": "rechaza una solicitud",
     "entonces": "su estado cambia a Rechazada y se libera la capacidad reservada"
+   },
+   "corto": "Atender solicitudes",
+   "criterios2": {
+    "dado": "un operador con solicitudes recibidas",
+    "cuando": "abre su panel",
+    "entonces": "ve cada solicitud con material, kg, vecino, recolector y estado",
+    "y": "solo puede pasarla a Entregada o Rechazada, según su estado actual"
    }
   },
   {
@@ -274,6 +308,13 @@
     "dado": "un administrador",
     "cuando": "suspende un punto de acopio",
     "entonces": "el punto deja de aparecer en la búsqueda"
+   },
+   "corto": "Moderación",
+   "criterios2": {
+    "dado": "un usuario o punto suspendido",
+    "cuando": "el administrador lo reactiva",
+    "entonces": "vuelve a aparecer en la plataforma",
+    "y": "un usuario suspendido no puede crear solicitudes ni tomar recojos"
    }
   },
   {
@@ -289,7 +330,8 @@
     "dado": "solicitudes entregadas en acopio",
     "cuando": "se consulta el inicio",
     "entonces": "se muestran los kg reciclados (solo entregadas) y el total de solicitudes"
-   }
+   },
+   "corto": "Indicadores de impacto"
   },
   {
    "id": "H16",
@@ -304,7 +346,8 @@
     "dado": "un recolector autenticado",
     "cuando": "registra su zona",
     "entonces": "queda guardada para futuras notificaciones"
-   }
+   },
+   "corto": "Zona del recolector"
   }
  ],
  "simulacion": {
@@ -440,14 +483,6 @@
   "In Review": 2
  },
  "dependencias": [
-  [
-   "H01",
-   "H03"
-  ],
-  [
-   "H02",
-   "H03"
-  ],
   [
    "H03",
    "H05"
