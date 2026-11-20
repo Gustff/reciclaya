@@ -88,14 +88,14 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Esperar el deploy de produccion de Vercel (integracion Git)
-        run: sleep 60
-      - name: Smoke test de la URL publica
+      - name: Smoke test de la URL publica (reintenta hasta 5 min mientras Vercel publica)
         env:
           URL: ${{ vars.PROD_URL }}
         run: |
-          for ruta in / /puntos /recolector /acopio; do
+          for i in $(seq 1 30); do curl -sf -o /dev/null "$URL" && break; echo "esperando deploy... ($i)"; sleep 10; done
+          for ruta in / /puntos /recolector /acopio /mis-solicitudes; do
             code=$(curl -s -o /dev/null -w "%{http_code}" "$URL$ruta")
             echo "$ruta -> $code"; test "$code" = "200"
           done
+          echo "Cabeceras de seguridad en produccion:"
           curl -sI "$URL" | grep -i -E "x-frame-options|x-content-type-options|strict-transport-security|referrer-policy"
