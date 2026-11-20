@@ -1,5 +1,5 @@
--- Datos de prueba (seed) para el entorno de desarrollo. Requiere usuarios creados en Auth;
--- reemplazar los UUID por los de auth.users o ejecutar despues de registrarse en la app.
--- insert into profiles (id, nombre, rol) values ('<uuid-vendedor>', 'Rosa Huaman', 'vendedor');
--- insert into stores (owner_id, nombre, rubro, direccion) values ('<uuid-vendedor>', 'Textiles Rosa', 'Telas', 'Jr. Gamarra 650');
--- insert into products (store_id, nombre, precio, stock) select id, 'Casimir azul marino (metro)', 38.50, 120 from stores where nombre = 'Textiles Rosa';
+-- Datos de prueba (ejecutar despues de crear los usuarios en Supabase Auth y sus profiles)
+-- insert into puntos_acopio (operador_id, nombre, distrito, direccion, dias, abre, cierra)
+--   values ('<uuid-operador>', 'EcoAcopio Surco', 'Santiago de Surco', 'Av. Caminos del Inca 1250', '{1,2,3,4,5,6}', '08:00', '18:00');
+-- insert into materiales (punto_id, nombre, pago_kg, capacidad_kg)
+--   select id, 'Plastico PET', 0.80, 500 from puntos_acopio where nombre = 'EcoAcopio Surco';
