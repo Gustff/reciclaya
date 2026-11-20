@@ -7,8 +7,8 @@ import { kgReciclados } from "@/lib/reglas";
 import ProductCard from "@/components/ProductCard";
 
 const PASOS = [
-  ["01", "Encuentra tu punto", "Filtra por material, distrito y horario. Sabras al instante si el punto esta abierto."],
-  ["02", "Solicita el recojo", "Indica el material, los kilos aproximados y tu direccion. Sin llamadas ni esperas."],
+  ["01", "Encuentra tu punto", "Filtra por material, distrito y horario. Sabrás al instante si el punto está abierto."],
+  ["02", "Solicita el recojo", "Indica el material, los kilos aproximados y tu dirección. Sin llamadas ni esperas."],
   ["03", "Un recolector lo lleva", "Recolectores de tu zona toman la solicitud y la entregan en el punto de acopio."],
 ];
 
@@ -45,7 +45,7 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-20">
-        <p className="eyebrow text-center text-brand">Como funciona</p>
+        <p className="eyebrow text-center text-brand">Cómo funciona</p>
         <h2 className="mt-3 text-center text-4xl font-black md:text-5xl">Reciclar nunca fue tan simple</h2>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {PASOS.map(([n, t, d]) => (
@@ -72,8 +72,8 @@ export default function Home() {
         <div className="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-50 to-emerald-100 p-10 md:grid-cols-2 md:p-16">
           <div>
             <p className="eyebrow text-brand-dark">Para recolectores</p>
-            <h2 className="mt-3 text-4xl font-black">Sabe donde hay material antes de salir</h2>
-            <p className="mt-4 text-neutral-700">Mira las solicitudes cercanas, toma las que te convienen y entregalas en el punto de acopio. Menos recorridos a ciegas, mas ingresos.</p>
+            <h2 className="mt-3 text-4xl font-black">Sabe dónde hay material antes de salir</h2>
+            <p className="mt-4 text-neutral-700">Mira las solicitudes cercanas, toma las que te convienen y entrégalas en el punto de acopio. Menos recorridos a ciegas, más ingresos.</p>
             <Link href="/recolector?as=u-juan" className="btn-primary mt-8">Probar como recolector</Link>
           </div>
           <div className="text-center text-[160px] leading-none">🚲</div>

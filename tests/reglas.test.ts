@@ -39,7 +39,7 @@ describe("validarPedido (HU: solicitar recojo de reciclables)", () => {
 describe("validarTomarRecojo (HU: recolector toma solicitudes)", () => {
   const pend = pedidos.find((o) => o.estado === "pendiente" && !o.recolectorId)!;
   it("un recolector puede tomar una solicitud pendiente", () => expect(validarTomarRecojo(pend, "recolector")).toBeNull());
-  it("no puede tomar una ya asignada", () => expect(validarTomarRecojo({ ...pend, estado: "aceptado", recolectorId: "u-x" }, "recolector")).toMatch(/no esta disponible/));
+  it("no puede tomar una ya asignada", () => expect(validarTomarRecojo({ ...pend, estado: "aceptado", recolectorId: "u-x" }, "recolector")).toMatch(/no está disponible/));
   it("un vecino no puede tomar recojos", () => expect(validarTomarRecojo(pend, "comprador")).not.toBeNull());
 });
 

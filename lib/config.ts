@@ -26,4 +26,4 @@ export const ESTADO_LABEL: Record<(typeof ESTADOS)[number], string> = {
   pendiente: "Pendiente", aceptado: "Asignada a recolector", entregado: "Entregada en acopio", rechazado: "Rechazada",
 };
 export const fmt = (n: number) => `${APP.moneda} ${n.toFixed(2)}`;
-export const DIAS = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
+export const DIAS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];

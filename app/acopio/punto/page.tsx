@@ -21,9 +21,9 @@ export default function MiPunto() {
     <div className="mx-auto max-w-xl px-6 py-14">
       <h1 className="mb-6 text-4xl font-black md:text-5xl">{actual ? "Editar mi punto de acopio" : "Registrar punto de acopio"}</h1>
       <div className="card space-y-4 p-6">
-        {campo("nombre", "Nombre")}{campo("rubro", L.rubro)}{campo("direccion", "Direccion")}
+        {campo("nombre", "Nombre")}{campo("rubro", L.rubro)}{campo("direccion", "Dirección")}
         <div>
-          <label className="label">Dias de atencion</label>
+          <label className="label">Días de atención</label>
           <div className="flex flex-wrap gap-2">{DIAS.map((d, i) => (
             <button key={d} type="button" onClick={() => toggleDia(i)} className={`rounded-md border px-3 py-1 text-sm ${f.horario.dias.includes(i) ? "border-brand bg-emerald-50 text-brand" : "border-neutral-300"}`}>{d}</button>
           ))}</div>

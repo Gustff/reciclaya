@@ -12,7 +12,7 @@ export default function PanelAcopio() {
   const t = tiendas.find((x) => x.ownerId === yo.id);
   if (!t) return (
     <div className="mx-auto max-w-xl px-4 py-16 text-center">
-      <h1 className="text-2xl font-bold">Aun no registras tu {L.tienda.toLowerCase()}</h1>
+      <h1 className="text-2xl font-bold">Aún no registras tu {L.tienda.toLowerCase()}</h1>
       <Link href="/acopio/punto" className="btn-primary mt-5">Registrar punto de acopio</Link>
     </div>
   );

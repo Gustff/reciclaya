@@ -33,8 +33,8 @@ export default function Solicitar() {
             <input id="kg" type="number" min={1} max={p.stock} className="input" value={kg} onChange={(e) => { setKg(Number(e.target.value)); setErr(""); }} />
           </div>
           <div>
-            <label className="label" htmlFor="dir">Direccion de recojo</label>
-            <input id="dir" className="input" placeholder="Calle, numero y distrito" value={dir} onChange={(e) => { setDir(e.target.value); setErr(""); }} />
+            <label className="label" htmlFor="dir">Dirección de recojo</label>
+            <input id="dir" className="input" placeholder="Calle, número y distrito" value={dir} onChange={(e) => { setDir(e.target.value); setErr(""); }} />
           </div>
           <div className="flex justify-between text-sm"><span>{L.ventas}</span><span className="font-bold">{fmt(p.precio * (kg || 0))}</span></div>
           {err && <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{err}</p>}

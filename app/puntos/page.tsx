@@ -25,9 +25,9 @@ export default function Puntos() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-14">
       <h1 className="text-4xl font-black md:text-5xl">Buscar {L.tiendas.toLowerCase()}</h1>
-      <p className="mt-1 text-neutral-600">Filtra por material, distrito y horario para saber donde llevar tus reciclables.</p>
+      <p className="mt-1 text-neutral-600">Filtra por material, distrito y horario para saber dónde llevar tus reciclables.</p>
       <div className="mt-5 grid gap-3 md:grid-cols-4">
-        <input className="input" placeholder="Nombre o direccion..." value={q} onChange={(e) => setQ(e.target.value)} />
+        <input className="input" placeholder="Nombre o dirección..." value={q} onChange={(e) => setQ(e.target.value)} />
         <select aria-label="Material" className="input" value={material} onChange={(e) => setMaterial(e.target.value)}>
           <option value="">Todos los materiales</option>{materiales.map((m) => <option key={m}>{m}</option>)}
         </select>

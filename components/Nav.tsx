@@ -13,7 +13,7 @@ export default function Nav() {
   const links =
     yo.rol === "vendedor" ? [["/", "Inicio"], ["/acopio", `${L.pedidos} ${L.recibidos}`], ["/acopio/materiales", L.productos], ["/acopio/punto", "Mi punto"]]
     : yo.rol === "recolector" ? [["/", "Inicio"], ["/recolector", "Recojos"], ["/puntos", L.tiendas]]
-    : yo.rol === "admin" ? [["/", "Inicio"], ["/puntos", L.tiendas], ["/admin", "Moderacion"]]
+    : yo.rol === "admin" ? [["/", "Inicio"], ["/puntos", L.tiendas], ["/admin", "Moderación"]]
     : [["/", "Inicio"], ["/puntos", L.tiendas], ["/mis-solicitudes", L.misPedidos]];
   return (
     <header className="sticky top-0 z-20 border-b border-neutral-200/70 bg-white/85 backdrop-blur-xl">

@@ -9,7 +9,7 @@ export default function MisSolicitudes() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-14">
       <h1 className="mb-6 text-4xl font-black md:text-5xl">{L.misPedidos}</h1>
-      {mios.length === 0 && <p className="text-neutral-500">Aun no tienes {L.pedidos.toLowerCase()}.</p>}
+      {mios.length === 0 && <p className="text-neutral-500">Aún no tienes {L.pedidos.toLowerCase()}.</p>}
       <div className="space-y-3">
         {mios.map((o) => {
           const p = productos.find((x) => x.id === o.productoId);

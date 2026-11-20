@@ -3,7 +3,7 @@ import type { Estado, Horario, Pedido, Producto, Rol, Tienda } from "./mock";
 
 const min = (hhmm: string) => { const [h, m] = hhmm.split(":").map(Number); return h * 60 + m; };
 
-/** Un punto de acopio esta abierto si el dia esta en su horario y la hora esta en [abre, cierra). */
+/** Un punto de acopio está abierto si el dia esta en su horario y la hora esta en [abre, cierra). */
 export function estaAbierto(h: Horario, fecha: Date): boolean {
   if (!h.dias.includes(fecha.getDay())) return false;
   const ahora = fecha.getHours() * 60 + fecha.getMinutes();
@@ -11,14 +11,14 @@ export function estaAbierto(h: Horario, fecha: Date): boolean {
 }
 
 export function validarHorario(h: Horario): string | null {
-  if (h.dias.length === 0) return "Seleccione al menos un dia de atencion";
-  if (!/^\d{2}:\d{2}$/.test(h.abre) || !/^\d{2}:\d{2}$/.test(h.cierra)) return "Formato de hora invalido (HH:MM)";
+  if (h.dias.length === 0) return "Seleccione al menos un día de atención";
+  if (!/^\d{2}:\d{2}$/.test(h.abre) || !/^\d{2}:\d{2}$/.test(h.cierra)) return "Formato de hora inválido (HH:MM)";
   if (min(h.abre) >= min(h.cierra)) return "La hora de apertura debe ser menor a la de cierre";
   return null;
 }
 
 export function validarTienda(t: Tienda, existentes: Tienda[]): string | null {
-  if (!t.nombre.trim() || !t.rubro.trim() || !t.direccion.trim()) return "Nombre, distrito y direccion son obligatorios";
+  if (!t.nombre.trim() || !t.rubro.trim() || !t.direccion.trim()) return "Nombre, distrito y dirección son obligatorios";
   if (existentes.some((x) => x.ownerId === t.ownerId && x.id !== t.id)) return "Este operador ya tiene un punto de acopio registrado";
   return validarHorario(t.horario);
 }
@@ -36,14 +36,14 @@ export function validarPedido(p: Producto | undefined, kg: number, rol: Rol, dir
   if (!p) return "Material no encontrado";
   if (!Number.isInteger(kg) || kg < 1) return "La cantidad debe ser al menos 1 kg";
   if (kg > p.stock) return `Capacidad insuficiente en el punto de acopio (disponible: ${p.stock} kg)`;
-  if (!direccion.trim()) return "Ingrese la direccion de recojo";
+  if (!direccion.trim()) return "Ingrese la dirección de recojo";
   return null;
 }
 
 /** Un recolector solo puede tomar solicitudes pendientes y sin recolector asignado. */
 export function validarTomarRecojo(o: Pedido, rol: Rol): string | null {
   if (rol !== "recolector") return "Solo un recolector puede tomar recojos";
-  if (o.estado !== "pendiente" || o.recolectorId) return "La solicitud ya no esta disponible";
+  if (o.estado !== "pendiente" || o.recolectorId) return "La solicitud ya no está disponible";
   return null;
 }
 
